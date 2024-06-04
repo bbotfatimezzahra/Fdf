@@ -6,14 +6,16 @@
 #    By: fbbot <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/31 11:40:05 by fbbot             #+#    #+#              #
-#    Updated: 2024/06/03 22:07:20 by fbbot            ###   ########.fr        #
+#    Updated: 2024/06/05 00:02:17 by fbbot            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= fdf
 CC	= gcc
 LFLAGS	= -L. -lmlx_Linux -lXext -lX11 -lm -lbsd
-SRC	= main.c
+SRC	= main.c Get_next_line/get_next_line.c Get_next_line/get_next_line.h\
+	Get_next_line/get_next_line_utils.c utils.c 
+
 OBJ	= $(SRC:%.c=%.o)
 
 .PHONY : all bonus re clean fclean

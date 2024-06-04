@@ -6,93 +6,74 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 10:31:34 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/03 21:33:31 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/04 23:34:22 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "mlx.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <X11/keysym.h>
+#include "fdf.h"
 
-typedef struct s_con {
-	void	*mlx;
-	void	*win;
-}	t_con;
-
-typedef struct s_data {
-	void	*img;
-	char	*addr;
-	int		bpp;
-	int		line_length;
-	int		endian;
-}				t_data;
-
-void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
+void	my_mlx_pixel_put(t_fdf *fdf, int x, int y, int color)
 {
 	char	*dst;
 
-	dst = data->addr + (y * data->line_length + x * (data->bpp / 8));
+	dst = fdf->addr + (y * fdf->line_length + x * (fdf->bpp / 8));
 	*(unsigned int *)dst = color;
 }
 
-int	escape(int keysym, t_con *con)
+int	escape(int keysym, t_fdf *fdf)
 {
 	if (keysym == XK_Escape)
-	{
-		mlx_destroy_window(con->mlx, con->win);
-		mlx_destroy_display(con->mlx);
-		free(con->mlx);
-		exit(0);
-	}
+		terminate(USR_INT, fdf);
 	return (0);
 }
 
-int	destroy(t_con *con)
+int	destroy(t_fdf *fdf)
 {
-	if (con->win)
-	{
-		mlx_destroy_window(con->mlx, con->win);
-		mlx_destroy_display(con->mlx);
-		free(con->mlx);
-		exit(0);
-	}
+	terminate(USR_INT, fdf);
 	return (0);
 }
 
+void	init_fdf(t_fdf *fdf)
+{
+	fdf->con = NULL;
+	fdf->win = NULL;
+	fdf->img = NULL;
+	fdf->addr = NULL;
+	fdf->bpp = 0;
+	fdf->line_length = 0;
+	fdf->endian = 0;
+}
+	
 int	main()
 {
-	t_con	con;
-	t_data	img;
+	t_fdf	fdf;
 
-	con.mlx = mlx_init();
-	con.win = mlx_new_window(con.mlx, 500, 500, "Hello World!");
-/*	img.img = mlx_new_image(mlx_ptr, 500, 500);
-	img.addr = mlx_get_data_addr(img.img, &img.bpp, &img.line_length, &img.endian);
-	my_mlx_pixel_put(&img, 5, 5, 0x00FF0000);
-	my_mlx_pixel_put(&img, 6, 5, 0x00FF0000);
-	my_mlx_pixel_put(&img, 7, 5, 0x00FF0000);
-	my_mlx_pixel_put(&img, 8, 5, 0x00FF0000);
-	my_mlx_pixel_put(&img, 9, 5, 0x00FF0000);
-	my_mlx_pixel_put(&img, 10, 5, 0x00FF0000);
-	my_mlx_pixel_put(&img, 11, 5, 0x00FF0000);
-	my_mlx_pixel_put(&img, 12, 5, 0x00FF0000);
-	my_mlx_pixel_put(&img, 13, 5, 0x00FF0000);
+	init_fdf(&fdf);
+	fdf.con = mlx_init();
+	if (!fdf.con)
+		terminate(ERR_CON, &fdf);
+	fdf.win = mlx_new_window(fdf.con, 500, 500, "Hello World!");
+	if (!fdf.win)
+		terminate(ERR_WIN, &fdf);
+	fdf.img = mlx_new_image(fdf.con, 1000, 1000);
+	if (!fdf.img)
+		terminate(ERR_IMG, &fdf);
+	fdf.addr = mlx_get_data_addr(fdf.img, &fdf.bpp, &fdf.line_length, &fdf.endian);
 	int	i = 10;
 	while (i <= 20)
 	{
-		my_mlx_pixel_put(&img, i, 10, 0x00FF0000);
-		my_mlx_pixel_put(&img, i++, 0, 0x00FF0000);
+		my_mlx_pixel_put(&fdf, i, 10, 0x00FF0000);
+		my_mlx_pixel_put(&fdf, i++, 0, 0x00FF0000);
 	}
 	i = 10;
 	while (i >= 0)
-		my_mlx_pixel_put(&img, 10, i--, 0x00FF0000);
-		my_mlx_pixel_put(&img, 20, i--, 0x00FF0000);
-
-	mlx_put_image_to_window(mlx_ptr, win_ptr, img.img, 0, 0);
-	*/
-	mlx_key_hook(con.win, escape, &con);
-	mlx_hook(con.win, 17, 1L<<2, destroy, &con);
-	mlx_loop(con.mlx);
+	{
+		my_mlx_pixel_put(&fdf, 10, i, 0x00FF0000);
+		my_mlx_pixel_put(&fdf, 20, i--, 0x00FF0000);
+	}
+	mlx_put_image_to_window(fdf.con, fdf.win, fdf.img, 0, 0);
+	mlx_key_hook(fdf.win, escape, &fdf);
+	mlx_hook(fdf.win, 17, 1L<<2, destroy, &fdf);
+	mlx_loop(fdf.con);
 	return (0);
 }
