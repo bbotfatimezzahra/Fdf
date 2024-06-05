@@ -6,7 +6,7 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 22:54:34 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/05 00:02:48 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/05 15:21:57 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,9 @@ void	terminate(char *error, t_fdf *fdf)
 		mlx_destroy_display(fdf->con);
 		free(fdf->con);
 	}
-	ft_putendl_fd(error, 1);
+	if (error)
+		ft_putendl_fd(error, 1);
+	else
+		perror(NULL);
 	exit(0);
 }
