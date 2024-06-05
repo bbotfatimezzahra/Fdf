@@ -6,7 +6,7 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 22:48:16 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/05 00:02:19 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/05 13:01:40 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <X11/keysym.h>
-# include "Get_next_line/get_next_line.h"
+# include "./Get_next_line/get_next_line.h"
 
 # define ERR_USAGE "Usage : ./fdf Map_file(file.fdf)"
 # define ERR_MAP "Incorrect Map file"
@@ -28,7 +28,8 @@
 # define ERR_MALLOC "Allocation failure"
 # define USR_INT "User interruption"
 
-typedef struct s_fdf {
+typedef struct s_fdf 
+{
 	void	*con;
 	void	*win;
 	void	*img;
@@ -37,6 +38,20 @@ typedef struct s_fdf {
 	int		line_length;
 	int		endian;
 }			t_fdf;
+
+typedef struct s_point 
+{
+	int	x;
+	int	y;
+	int	z;
+	int	color;
+	struct s_point	next;
+}		t_point;
+
+typedef struct s_map 
+{
+	int	rows;
+	int	columns;
 
 void	terminate(char *error, t_fdf *fdf);
 #endif
