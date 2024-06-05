@@ -6,7 +6,7 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 22:48:16 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/05 15:48:16 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/05 19:33:42 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,14 @@ typedef struct s_point
 	int				z;
 	int				color;
 	struct s_point	*next;
+	struct s_point	*under;
 }		t_point;
 
 typedef struct s_map
 {
 	int		rows;
 	int		columns;
-	t_point	*head;
+	t_point	*points;
 }		t_map;
 
 typedef struct s_fdf
@@ -55,7 +56,7 @@ typedef struct s_fdf
 	int		bpp;
 	int		line_length;
 	int		endian;
-	t_map	*map;
+	t_map	map;
 }			t_fdf;
 void	terminate(char *error, t_fdf *fdf);
 int	open_map(char *file, t_fdf *fdf);

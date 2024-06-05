@@ -6,7 +6,7 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 10:31:34 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/05 15:46:39 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/05 16:50:45 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,9 @@ void	init_fdf(t_fdf *fdf)
 	fdf->bpp = 0;
 	fdf->line_length = 0;
 	fdf->endian = 0;
-	fdf->map->rows = 0;
-	fdf->map->columns = 0;
-	fdf->map->head = NULL;
+	fdf->map.rows = 0;
+	fdf->map.columns = 0;
+	fdf->map.points = NULL;
 }
 
 int	main(int argc, char **argv)
@@ -55,6 +55,7 @@ int	main(int argc, char **argv)
 	init_fdf(&fdf);
 	if (argc < 2 || open_map(argv[1], &fdf))
 		terminate(ERR_USAGE, &fdf);
+	printf("all good rows%d\n",fdf.map.rows);
 	fdf.con = mlx_init();
 	if (!fdf.con)
 		terminate(ERR_CON, &fdf);
