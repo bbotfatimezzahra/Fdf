@@ -6,7 +6,7 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:50:44 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/05 17:34:45 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/06 15:36:20 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,33 +57,54 @@ int	ft_atoi(const char *str)
 	return (result * sign);
 }
 
+void	create_map(char *str, t_fdf *fdf)
+{
+	char	**rows;
+	int	row;
+	int	col;
+
+	fdf->map.points = malloc(sizeof(t_point*) * (fdf->map.rows + 1));
+	if (!fdf->map.points)
+		terminate(ERR_MALOC, fdf);
+	rows = ft_split(str, '\n');
+	free(str);
+	row = 0;
+	while (rows[row])
+	{
+		col = 0;
+		i = 0;
+		while (rows[row][i])
+		{
+			
+		
+	printf("this the map :\n%s",map);
+
+
 int	open_map(char *file, t_fdf *fdf)
 {
-	char	*str;
+	char	**str;
+	char	*map;
 	int	fd;
 	int	i;
 	t_point	*point;
 
-	str = ft_strchr(file, '.');
-	if (!str || ft_strncmp(str, ".fdf", 5))
+	*str = ft_strchr(file, '.');
+	if (!*str || ft_strncmp(*str, ".fdf", 5))
 		terminate(ERR_USAGE, fdf);
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
 		terminate(NULL, fdf);
-	str = get_next_line(fd);
-	i = 0;
-	while(str)
+	*str = get_next_line(fd);
+	if (!*str)
+		terminate("Empty map file", fdf);
+	map = NULL;
+	while(*str)
 	{
 		fdf->map.rows++;
-		while (str[i])
-		{
-			point = ft_lstnew(fdf->map.rows, i, ft_atoi(str));
-			ft_lstadd_back(&fdf->map.points, point);
-		}
-		printf("%s",str);
-		free(str);
-		str = get_next_line(fd);
+		map = ft_strjoin(map,*str);
+		*str = get_next_line(fd);
 	}
 	close(fd);
+	create_map(map, fdf);
 	return (0);
 }
