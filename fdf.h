@@ -6,7 +6,7 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 22:48:16 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/11 13:50:05 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/11 15:29:26 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@
 # define ERR_IMG "Image initialization failure"
 # define ERR_MALLOC "Allocation failure"
 # define USR_INT "User interruption"
+
+# define WHITE "FFFFFF"
 
 typedef struct s_point
 {
@@ -60,6 +62,7 @@ typedef struct s_fdf
 }			t_fdf;
 void	*ft_calloc(size_t count, size_t size);
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
+void	free_double(char **ptr);
 void	terminate(char *error, t_fdf *fdf);
 char	**ft_split(const char *str, char c, int *length);
 int	open_map(char *file, t_fdf *fdf);

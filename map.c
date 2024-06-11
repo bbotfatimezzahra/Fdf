@@ -6,7 +6,7 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:50:44 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/11 14:14:27 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/11 16:56:17 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 
 int	ft_atoi(const char *str)
 {
-	unsigned long long	result;
-	int					sign;
+	long long	result;
+	long long	sign;
 	int					i;
 
 	result = 0;
@@ -39,19 +39,20 @@ int	ft_atoi(const char *str)
 	i = 0;
 	while (str[i] && ((str[i] >= 9 && str[i] <= 13) || str[i] == 32))
 		i++;
-	if (str[i] == '-' || str[i] == '+')
+	if (str[i] == '-')
 	{
-		if (str[i] == '-')
-			sign *= -1;
+		sign = -1;
 		i++;
 	}
 	while (str[i] && (str[i] >= '0' && str[i] <= '9'))
 	{
 		result = (result * 10) + (str[i] - '0');
-		if (result >= LONG_MAX && sign == 1)
-			return (-1);
-		else if (result > LONG_MAX && sign == -1)
+		printf("while %llu sign %llu str %s\n", result,sign, str);
+		if (((result * sign) > INT_MAX) || ((result * sign) > INT_MIN))
+		{
+			printf("hello %llu\n", result * sign);
 			return (0);
+		}
 		i++;
 	}
 	return (result * sign);
@@ -63,34 +64,74 @@ void	create_map(char *str, t_fdf *fdf)
 	char	**columns;
 	int	i;
 	int	j;
+	int	tmp;
 
 	rows = ft_split(str, '\n',&fdf->map.rows);
 	free(str);
+	if (!rows)
+		terminate(ERR_MALLOC, fdf);
 	fdf->map.points = malloc(sizeof(t_point*) * (fdf->map.rows + 1));
 	if (!fdf->map.points)
+	{
+		free_double(rows);
 		terminate(ERR_MALLOC, fdf);
+	}
 	columns = ft_split(rows[0], ' ', &fdf->map.cols);
+	if (!columns)
+	{
+		free_double(rows);
+		terminate(ERR_MALLOC, fdf);
+	}
 	i = 0;
 	while (i < fdf->map.rows)
 	{
-		fdf->map.points[i] = malloc(sizeof(t_point) * (fdf->map.cols + 1));
+		fdf->map.points[i] = malloc(sizeof(t_point) * (fdf->map.cols));
 		if (!fdf->map.points[i])
+		{
+			free_double(rows);
+			free_double(columns);
 			terminate(ERR_MALLOC, fdf);
+		}
 		j = 0;
 		while (j < fdf->map.cols)
 		{
-			fdf->map.points[i].x = i;
-			fdf->map.points[i].y = j;
-			fdf->map.points[i].z = ft_atoi(columns[j]);
-			free(columns[j]);
+			fdf->map.points[i][j].x = i;
+			fdf->map.points[i][j].y = j;
+			fdf->map.points[i][j].z = ft_atoi(columns[j]);
+		//	printf("row %d column %d : %s z = %d\n", i, j, columns[j],fdf->map.points[i]->z);
+			if (!fdf->map.points[i]->z && columns[j][0] != '0')
+			{
+				free_double(rows);
+				free_double(columns);
+				terminate(ERR_MAP, fdf);
+			}		
 			j++;
 		}
-		free(columns);
-		columns = ft_split(rows[i], ' ', &fdf->map.cols);
-
-			
-	*/	
-	printf("this the map :\nrows :%d\ncolumns :%d\n",fdf->map.rows, fdf->map.cols);
+		free_double(columns);
+		columns = ft_split(rows[++i], ' ', &tmp);
+		if (tmp != fdf->map.cols)
+		{
+			free_double(rows);
+			free_double(columns);
+			terminate(ERR_MALLOC, fdf);
+		}	
+	}
+	fdf->map.points[i] = NULL;
+	free_double(columns);
+	free_double(rows);
+	i = j = 0;
+	printf("this the map :\n");
+	while (i < fdf->map.rows)
+	{
+		j = 0;
+		while (j < fdf->map.cols)
+		{
+			printf("%d ",fdf->map.points[i][j].z);
+			j++;
+		}
+		printf("\n");
+		i++;
+	}
 }
 
 int	open_map(char *file, t_fdf *fdf)
@@ -114,6 +155,8 @@ int	open_map(char *file, t_fdf *fdf)
 	while(*str)
 	{
 		map = ft_strjoin(map,*str);
+		if (!map)
+			terminate(ERR_MALLOC, fdf);
 		*str = get_next_line(fd);
 	}
 	close(fd);

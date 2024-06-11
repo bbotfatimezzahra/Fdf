@@ -6,7 +6,7 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 22:54:34 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/05 15:21:57 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/11 15:28:58 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,29 @@ void	ft_putendl_fd(char *s, int fd)
 	}
 }
 
+void	free_double(char **ptr)
+{
+	int	i;
+
+	i = 0;
+	if (!ptr)
+		return ;
+	while (ptr[i])
+		free(ptr[i++]);
+	free(ptr);
+}
+
 void	terminate(char *error, t_fdf *fdf)
 {
+	int	i;
+
+	i = 0;
+	if (fdf->map.points)
+	{
+		while (fdf->map.points[i])
+			free(fdf->map.points[i++]);
+		free(fdf->map.points);
+	}
 	if (fdf->img)
 		mlx_destroy_image(fdf->con, fdf->img);
 	if (fdf->win)
