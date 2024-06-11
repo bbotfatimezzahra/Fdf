@@ -55,7 +55,6 @@ int	main(int argc, char **argv)
 	init_fdf(&fdf);
 	if (argc < 2 || open_map(argv[1], &fdf))
 		terminate(ERR_USAGE, &fdf);
-	printf("all good rows%d\n",fdf.map.rows);
 	fdf.con = mlx_init();
 	if (!fdf.con)
 		terminate(ERR_CON, &fdf);

@@ -48,16 +48,10 @@ int	ft_atoi(const char *str)
 	while (str[i] && (str[i] >= '0' && str[i] <= '9'))
 	{
 		result = (result * 10) + (str[i] - '0');
-		if (result > 2147483647 && sign == 1)
-		{
-			printf("hello 1%llu\n", result * sign);
+		if ((result > 2147483647) && sign == 1)
 			return (0);
-		}
-		else if (result > 2147483648 && sign == -1)
-		{
-			printf("hello 2%llu\n", result * sign);
+		else if ((result > 2147483648) && sign == -1)
 			return (0);
-		}
 		i++;
 	}
 	return (result * sign);
@@ -103,8 +97,7 @@ void	create_map(char *str, t_fdf *fdf)
 			fdf->map.points[i][j].x = i;
 			fdf->map.points[i][j].y = j;
 			fdf->map.points[i][j].z = ft_atoi(columns[j]);
-		//	printf("row %d column %d : %s z = %d\n", i, j, columns[j],fdf->map.points[i]->z);
-			if (!fdf->map.points[i]->z && columns[j][0] != '0')
+			if (!fdf->map.points[i][j].z && (columns[j][0] != '0'))
 			{
 				free_double(rows);
 				free_double(columns);
@@ -141,28 +134,28 @@ void	create_map(char *str, t_fdf *fdf)
 
 int	open_map(char *file, t_fdf *fdf)
 {
-	char	**str;
+	char	*str;
 	char	*map;
 	int	fd;
 	int	i;
 	t_point	*point;
 
-	*str = ft_strchr(file, '.');
-	if (!*str || ft_strncmp(*str, ".fdf", 5))
+	str = ft_strchr(file, '.');
+	if (!str || ft_strncmp(str, ".fdf", 5))
 		terminate(ERR_USAGE, fdf);
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
 		terminate(NULL, fdf);
-	*str = get_next_line(fd);
-	if (!*str)
+	str = get_next_line(fd);
+	if (!str)
 		terminate("Empty map file", fdf);
 	map = NULL;
-	while(*str)
+	while(str)
 	{
-		map = ft_strjoin(map,*str);
+		map = ft_strjoin(map,str);
 		if (!map)
 			terminate(ERR_MALLOC, fdf);
-		*str = get_next_line(fd);
+		str = get_next_line(fd);
 	}
 	close(fd);
 	create_map(map, fdf);
