@@ -6,7 +6,7 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 10:31:34 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/05 16:50:45 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/11 13:40:20 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	init_fdf(t_fdf *fdf)
 	fdf->line_length = 0;
 	fdf->endian = 0;
 	fdf->map.rows = 0;
-	fdf->map.columns = 0;
+	fdf->map.cols = 0;
 	fdf->map.points = NULL;
 }
 

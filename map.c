@@ -6,7 +6,7 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:50:44 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/06 15:36:20 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/11 14:14:27 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,25 +60,38 @@ int	ft_atoi(const char *str)
 void	create_map(char *str, t_fdf *fdf)
 {
 	char	**rows;
-	int	row;
-	int	col;
+	char	**columns;
+	int	i;
+	int	j;
 
+	rows = ft_split(str, '\n',&fdf->map.rows);
+	free(str);
 	fdf->map.points = malloc(sizeof(t_point*) * (fdf->map.rows + 1));
 	if (!fdf->map.points)
-		terminate(ERR_MALOC, fdf);
-	rows = ft_split(str, '\n');
-	free(str);
-	row = 0;
-	while (rows[row])
+		terminate(ERR_MALLOC, fdf);
+	columns = ft_split(rows[0], ' ', &fdf->map.cols);
+	i = 0;
+	while (i < fdf->map.rows)
 	{
-		col = 0;
-		i = 0;
-		while (rows[row][i])
+		fdf->map.points[i] = malloc(sizeof(t_point) * (fdf->map.cols + 1));
+		if (!fdf->map.points[i])
+			terminate(ERR_MALLOC, fdf);
+		j = 0;
+		while (j < fdf->map.cols)
 		{
-			
-		
-	printf("this the map :\n%s",map);
+			fdf->map.points[i].x = i;
+			fdf->map.points[i].y = j;
+			fdf->map.points[i].z = ft_atoi(columns[j]);
+			free(columns[j]);
+			j++;
+		}
+		free(columns);
+		columns = ft_split(rows[i], ' ', &fdf->map.cols);
 
+			
+	*/	
+	printf("this the map :\nrows :%d\ncolumns :%d\n",fdf->map.rows, fdf->map.cols);
+}
 
 int	open_map(char *file, t_fdf *fdf)
 {
@@ -100,7 +113,6 @@ int	open_map(char *file, t_fdf *fdf)
 	map = NULL;
 	while(*str)
 	{
-		fdf->map.rows++;
 		map = ft_strjoin(map,*str);
 		*str = get_next_line(fd);
 	}

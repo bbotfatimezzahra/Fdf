@@ -6,7 +6,7 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:29:49 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/05 16:31:57 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/11 14:14:26 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,19 +90,21 @@ static char	**create_split(char const *s, char c, int *l)
 	return (split);
 }
 
-char	**ft_split(char const *s, char c)
+char	**ft_split(char const *s, char c, int *len)
 {
 	char	**split;
-	int		length;
+	int	*length;
 
 	if (!s)
 		return (NULL);
-	split = create_split(s, c, &length);
+	split = create_split(s, c, length);
 	if (!split)
 		return (NULL);
 	split = fill_split(split, s, c);
 	if (!split)
 		return (NULL);
-	split[length] = NULL;
+	split[*length] = NULL;
+	if (len && length != len)
+	
 	return (split);
 }
