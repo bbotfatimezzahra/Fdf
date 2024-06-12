@@ -6,7 +6,7 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 22:54:34 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/11 15:28:58 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/12 10:37:59 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	terminate(char *error, t_fdf *fdf)
 	i = 0;
 	if (fdf->map.points)
 	{
-		while (fdf->map.points[i])
+		while (i < fdf->map.rows)
 			free(fdf->map.points[i++]);
 		free(fdf->map.points);
 	}

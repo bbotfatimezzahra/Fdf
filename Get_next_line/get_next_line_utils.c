@@ -6,7 +6,7 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 18:53:30 by fbbot             #+#    #+#             */
-/*   Updated: 2023/12/27 11:25:18 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/12 10:35:29 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,11 @@ char	*ft_strjoin(char *s1, char *s2)
 	if (!s1 && !s2)
 		return (NULL);
 	if (!s1)
-		return (ft_strldup(s2, ft_strlen(s2)));
+	{
+		s3 = ft_strldup(s2, ft_strlen(s2));
+		free(s2);
+		return (s3);
+	}
 	if (!s2)
 		return (ft_strldup(s1, ft_strlen(s1)));
 	length = ft_strlen(s1) + ft_strlen(s2) + 1;

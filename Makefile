@@ -6,7 +6,7 @@
 #    By: fbbot <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/31 11:40:05 by fbbot             #+#    #+#              #
-#    Updated: 2024/06/11 13:48:36 by fbbot            ###   ########.fr        #
+#    Updated: 2024/06/12 14:15:27 by fbbot            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,9 +14,9 @@ NAME	= fdf
 CC	= gcc
 CFLAGS	= -Wall -Wextra -Werror 
 LFLAGS	= -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz 
-SRC	= main.c Get_next_line/get_next_line.c map.c ft_split.c\
-	Get_next_line/get_next_line_utils.c utils.c fdf_utils.c
-
+SRC	= main.c map.c display.c image.c clean_utils.c str_utils.c map_utils.c\
+	ft_split.c\
+	Get_next_line/get_next_line_utils.c Get_next_line/get_next_line.c 
 OBJ	= $(SRC:%.c=%.o)
 
 .PHONY : all bonus re clean fclean
