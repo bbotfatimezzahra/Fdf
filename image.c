@@ -6,7 +6,7 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 14:08:58 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/12 20:38:39 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/12 23:04:11 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,9 @@ t_point	scale_point(t_point b, int scale)
 	t_point	a;
 
 	a.x = b.x * scale;
+	a.x = (a.x - a.z) * cos(0.46365);
 	a.y = b.y * scale;
-	a.z = b.z * scale;
+	a.y = a.y + (a.x + a.z) * sin(0.46365);
 	return (a);
 }
 

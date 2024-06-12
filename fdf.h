@@ -6,7 +6,7 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 22:48:16 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/12 20:38:37 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/12 23:04:12 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include "./Get_next_line/get_next_line.h"
 # include <limits.h>
 # include <stdint.h>
+# include <math.h>
 
 # define ERR_USAGE "Usage : ./fdf Map_file(file.fdf)"
 # define ERR_MAP "Incorrect Map file"
