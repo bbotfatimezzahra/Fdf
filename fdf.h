@@ -6,7 +6,7 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 22:48:16 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/12 14:13:06 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/12 20:38:37 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,9 @@
 
 # define WHITE 0x0000FF00
 
+# define DIS_WIDTH 1920
+# define DIS_LENGTH 1080
+
 typedef struct s_point
 {
 	int				x;
@@ -58,6 +61,7 @@ typedef struct s_fdf
 	int		bpp;
 	int		line_length;
 	int		endian;
+	int		scale;
 	t_map	map;
 }			t_fdf;
 void	*ft_calloc(size_t count, size_t size);
@@ -66,8 +70,9 @@ int		ft_strncmp(const char *s1, const char *s2, size_t n);
 int		ft_atoi(const char *str);
 void	free_double(char **ptr);
 void	terminate(char *error, t_fdf *fdf);
+void	zoom(t_fdf *fdf, int a);
 char	**ft_split(const char *str, char c, int *length);
 int		parse_map(char *file, t_fdf *fdf);
 void	start_display(t_fdf *fdf);
-void	create_image(t_fdf *fdf);
+void	fill_image(t_fdf *fdf);
 #endif

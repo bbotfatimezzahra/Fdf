@@ -6,13 +6,23 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 14:08:58 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/12 14:13:03 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/12 20:38:39 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void	my_mlx_pixel_put(t_fdf *fdf, int x, int y, int color)
+t_point	scale_point(t_point b, int scale)
+{
+	t_point	a;
+
+	a.x = b.x * scale;
+	a.y = b.y * scale;
+	a.z = b.z * scale;
+	return (a);
+}
+
+void	put_pixel(t_fdf *fdf, int x, int y, int color)
 {
 	char	*dst;
 
@@ -20,22 +30,97 @@ void	my_mlx_pixel_put(t_fdf *fdf, int x, int y, int color)
 	*(unsigned int *)dst = color;
 }
 
-void	create_image(t_fdf *fdf)
+void	straight_line(t_fdf *fdf, t_point a, t_point b)
 {
-	fdf->img = mlx_new_image(fdf->con, 1000, 1000);
-	if (!fdf->img)
-		terminate(ERR_IMG, fdf);
-	fdf->addr = mlx_get_data_addr(fdf->img, &fdf->bpp, &fdf->line_length, &fdf->endian);
-	int	i = 10;
-	while (i <= 20)
+	t_point	c;
+
+	c = a;
+	c.color = WHITE;
+	if (a.x == b.x)
 	{
-		my_mlx_pixel_put(fdf, i, 10, WHITE);
-		my_mlx_pixel_put(fdf, i++, 0, WHITE);
+		while ((c.y != b.y) && (c.x < 1920) && (c.y < 1080))
+			put_pixel(fdf, c.x, ++c.y, c.color);
 	}
-	i = 10;
-	while (i >= 0)
+	else if (a.y == b.y)
 	{
-		my_mlx_pixel_put(fdf, 10, i, WHITE);
-		my_mlx_pixel_put(fdf, 20, i--, WHITE);
+		while ((c.x != b.x) && (c.x < 1920) && (c.y < 1080))
+			put_pixel(fdf, ++c.x, c.y, c.color);
 	}
+}
+
+void	angled_line(t_fdf *fdf, t_point a, t_point b)
+{
+	int		dx;
+	int		dy;
+	int		p;
+	t_point	c;
+
+	c = a;
+	c.color = WHITE;
+	dx = b.x - a.x;
+	dy = b.y - a.y;
+	p = 2 * dy - dx;
+	while (((c.x != b.x) || (c.y != b.y)) && (c.x < 1920) && (c.y < 1080))
+	{
+		if (p > 0)
+		{
+			put_pixel(fdf, ++c.x, ++c.y, c.color);
+			p += 2 * dy - 2 * dx;
+		}
+		else
+		{
+			put_pixel(fdf, ++c.x, c.y, c.color);
+			p += 2 * dy - dx;
+		}
+	}
+}
+
+void	draw_background(t_fdf *fdf)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (i < DIS_WIDTH)
+	{
+		j = 0;
+		while (j < DIS_LENGTH)
+			put_pixel(fdf, i, j++, 0x00000000);
+		i++;
+	}
+}
+
+void	draw_line(t_fdf *fdf, t_point a, t_point b, int projection)
+{
+	(void) projection;
+	a = scale_point(a, fdf->scale);
+	b = scale_point(b, fdf->scale);
+	if ((a.x != b.x) && (a.y != b.y))
+		angled_line(fdf, a, b);
+	else
+		straight_line(fdf, a, b);
+}
+	
+void	fill_image(t_fdf *fdf)
+{
+	int		i;
+	int		j;
+
+	draw_background(fdf);
+	i = 0;
+	while (i < fdf->map.rows)
+	{
+		j = 0;
+		while (j < fdf->map.cols)
+		{
+			if ((j + 1) < fdf->map.cols)
+				draw_line(fdf, fdf->map.points[i][j], fdf->map.points[i][j + 1], 0);
+			if ((i + 1) < fdf->map.rows)
+				draw_line(fdf, fdf->map.points[i][j], fdf->map.points[i + 1][j], 0);
+			j++;
+		}
+		i++;
+	}
+	mlx_put_image_to_window(fdf->con, fdf->win, fdf->img, 0, 0);
 }
