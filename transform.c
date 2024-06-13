@@ -1,39 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   transform.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/20 10:31:34 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/13 13:15:46 by fbbot            ###   ########.fr       */
+/*   Created: 2024/06/13 10:03:54 by fbbot             #+#    #+#             */
+/*   Updated: 2024/06/13 10:32:50 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void	init_fdf(t_fdf *fdf)
+int	**multiply_mat(int **mat, t_point *a)
 {
-	fdf->con = NULL;
-	fdf->win = NULL;
-	fdf->img = NULL;
-	fdf->addr = NULL;
-	fdf->bpp = 0;
-	fdf->line_length = 0;
-	fdf->endian = 0;
-	fdf->map.rows = 0;
-	fdf->map.cols = 0;
-	fdf->map.points = NULL;
-	fdf->scale = 10;
+	int	result[
+void	isometric(t_point *a)
+{
+	int	iso[2][3];
+
+	iso[0][0] = 1;
+	iso[1][1] = 1;
+	mat_mul(iso, a);
 }
 
-int	main(int argc, char **argv)
+void	rotate(t_point *a, float angle)
 {
-	t_fdf	fdf;
+	int	rot[4][4];
 
-	init_fdf(&fdf);
-	if (argc < 2 || parse_map(argv[1], &fdf))
-		terminate(ERR_USAGE, &fdf);
-	start_display(&fdf);
-	return (0);
+}
+
+void	scale(t_point *a, int scale)
+{
+	int	rot[4][4];
+
+}
+
+void	translate(t_point *a, int distance)
+{
+	int	rot[4][4];
+
 }

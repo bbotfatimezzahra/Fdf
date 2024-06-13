@@ -6,7 +6,7 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 14:08:58 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/12 23:04:11 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/13 13:20:53 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,7 @@ t_point	scale_point(t_point b, int scale)
 	t_point	a;
 
 	a.x = b.x * scale;
-	a.x = (a.x - a.z) * cos(0.46365);
 	a.y = b.y * scale;
-	a.y = a.y + (a.x + a.z) * sin(0.46365);
 	return (a);
 }
 
@@ -27,8 +25,11 @@ void	put_pixel(t_fdf *fdf, int x, int y, int color)
 {
 	char	*dst;
 
-	dst = fdf->addr + (y * fdf->line_length + x * (fdf->bpp / 8));
-	*(unsigned int *)dst = color;
+	if ((x < (fdf->map.rows + 1) * fdf->scale) && (y < (fdf->map.cols + 2) * fdf->scale))
+	{
+		dst = fdf->addr + (y * fdf->line_length + x * (fdf->bpp / 8));
+		*(unsigned int *)dst = color;
+	}
 }
 
 void	straight_line(t_fdf *fdf, t_point a, t_point b)
@@ -39,12 +40,12 @@ void	straight_line(t_fdf *fdf, t_point a, t_point b)
 	c.color = WHITE;
 	if (a.x == b.x)
 	{
-		while ((c.y != b.y) && (c.x < 1920) && (c.y < 1080))
+		while (c.y != b.y)
 			put_pixel(fdf, c.x, ++c.y, c.color);
 	}
 	else if (a.y == b.y)
 	{
-		while ((c.x != b.x) && (c.x < 1920) && (c.y < 1080))
+		while (c.x != b.x)
 			put_pixel(fdf, ++c.x, c.y, c.color);
 	}
 }
@@ -61,7 +62,7 @@ void	angled_line(t_fdf *fdf, t_point a, t_point b)
 	dx = b.x - a.x;
 	dy = b.y - a.y;
 	p = 2 * dy - dx;
-	while (((c.x != b.x) || (c.y != b.y)) && (c.x < 1920) && (c.y < 1080))
+	while ((c.x != b.x) || (c.y != b.y))
 	{
 		if (p > 0)
 		{
@@ -83,10 +84,10 @@ void	draw_background(t_fdf *fdf)
 
 	i = 0;
 	j = 0;
-	while (i < DIS_WIDTH)
+	while (i < (fdf->map.rows + 10))
 	{
 		j = 0;
-		while (j < DIS_LENGTH)
+		while (j < (fdf->map.cols + 20))
 			put_pixel(fdf, i, j++, 0x00000000);
 		i++;
 	}
