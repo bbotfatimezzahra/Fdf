@@ -6,7 +6,7 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 14:00:59 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/13 13:19:07 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/13 20:15:37 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	start_display(t_fdf *fdf)
 	fdf->con = mlx_init();
 	if (!fdf->con)
 		terminate(ERR_CON, fdf);
-	fdf->win = mlx_new_window(fdf->con, (fdf->map.rows + 10) * fdf->scale, (fdf->map.cols + 20) * fdf->scale, "FDF PROJECT");
+	fdf->win = mlx_new_window(fdf->con, fdf->width, fdf->length, "FDF PROJECT");
 	if (!fdf->win)
 		terminate(ERR_WIN, fdf);
 		printf("window %d co %d\n",fdf->map.rows,fdf->map.cols);

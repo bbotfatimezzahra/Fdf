@@ -6,7 +6,7 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:50:44 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/12 13:56:18 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/13 20:15:34 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,8 @@ void	create_map(char *str, t_fdf *fdf)
 	}
 	fill_map(rows, fdf);
 	free_double(rows);
+	fdf->width = (fdf->map.rows + 20) * fdf->scale;
+	fdf->length = (fdf->map.cols + 20) * fdf->scale;
 	/*i = j = 0;
 	printf("this the map :\n");
 	while (i < fdf->map.rows)

@@ -6,7 +6,7 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 22:48:16 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/12 23:04:12 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/13 20:15:35 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ typedef struct s_map
 {
 	int		rows;
 	int		cols;
+	int		width;
+	int		length;
 	t_point	**points;
 }		t_map;
 
@@ -63,8 +65,11 @@ typedef struct s_fdf
 	int		line_length;
 	int		endian;
 	int		scale;
+	int		width;
+	int		length;
 	t_map	map;
 }			t_fdf;
+
 void	*ft_calloc(size_t count, size_t size);
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
