@@ -6,7 +6,7 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 14:08:58 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/13 13:20:53 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/14 10:32:44 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,32 @@ void	draw_line(t_fdf *fdf, t_point a, t_point b, int projection)
 		straight_line(fdf, a, b);
 }
 	
+void	rotatex_map(t_fdf *fdf)
+{
+	int	i;
+	int	j;
+	int	*y;
+	int	*z;
+	t_point	*a;
+
+	i = 0;
+	while (i < fdf->map.rows)
+	{
+		j = 0;
+		while (j < fdf->map.cols)
+		{
+			a = &fdf->map.points[i][j]
+			y = &a.y;
+			z = &a.z;
+			y = a.y * cos(rad) - a.z * sin(rad);
+			z = a.y * sin(rad) + a.z * cos(rad);
+
+			
+			j++;
+		}
+		i++;
+	}
+
 void	fill_image(t_fdf *fdf)
 {
 	int		i;
