@@ -12,6 +12,16 @@
 
 #include "fdf.h"
 
+int set_color(char *str, t_fdf *fdf)
+{
+ int red;
+int green;
+int blue;
+
+if (!ft_strchr(str, ','))
+ return (DEFAULT_COL);
+
+
 void	fill_row(char **rows, char **columns, int i, t_fdf *fdf)
 {
 	int	j;
