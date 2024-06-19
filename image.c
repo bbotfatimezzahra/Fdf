@@ -25,7 +25,7 @@ void	put_pixel(t_fdf *fdf, int x, int y, int color)
 {
 	char	*dst;
 
-	if ((x < (fdf->map.rows + 1) * fdf->scale) && (y < (fdf->map.cols + 2) * fdf->scale))
+	if (x < (fdf->width + 1) && y < (fdf->length + 1))
 	{
 		dst = fdf->addr + (y * fdf->line_length + x * (fdf->bpp / 8));
 		*(unsigned int *)dst = color;
@@ -37,7 +37,6 @@ void	straight_line(t_fdf *fdf, t_point a, t_point b)
 	t_point	c;
 
 	c = a;
-	c.color = WHITE;
 	if (a.x == b.x)
 	{
 		while (c.y != b.y)
@@ -58,7 +57,6 @@ void	angled_line(t_fdf *fdf, t_point a, t_point b)
 	t_point	c;
 
 	c = a;
-	c.color = WHITE;
 	dx = b.x - a.x;
 	dy = b.y - a.y;
 	p = 2 * dy - dx;
@@ -84,10 +82,10 @@ void	draw_background(t_fdf *fdf)
 
 	i = 0;
 	j = 0;
-	while (i < (fdf->map.rows + 10))
+	while (i < (fdf->width))
 	{
 		j = 0;
-		while (j < (fdf->map.cols + 20))
+		while (j < (fdf->length))
 			put_pixel(fdf, i, j++, 0x00000000);
 		i++;
 	}
@@ -95,15 +93,17 @@ void	draw_background(t_fdf *fdf)
 
 void	draw_line(t_fdf *fdf, t_point a, t_point b, int projection)
 {
+				printf("oh GOD\n");
 	(void) projection;
 	a = scale_point(a, fdf->scale);
 	b = scale_point(b, fdf->scale);
-	if ((a.x != b.x) && (a.y != b.y))
+//	if ((a.x != b.x) && (a.y != b.y))
+	printf("hello\n");
 		angled_line(fdf, a, b);
-	else
-		straight_line(fdf, a, b);
+//	else
+//		straight_line(fdf, a, b);
 }
-	
+/*	
 void	rotatex_map(t_fdf *fdf)
 {
 	int	i;
@@ -129,7 +129,8 @@ void	rotatex_map(t_fdf *fdf)
 		}
 		i++;
 	}
-
+}
+*/
 void	fill_image(t_fdf *fdf)
 {
 	int		i;
@@ -146,6 +147,7 @@ void	fill_image(t_fdf *fdf)
 				draw_line(fdf, fdf->map.points[i][j], fdf->map.points[i][j + 1], 0);
 			if ((i + 1) < fdf->map.rows)
 				draw_line(fdf, fdf->map.points[i][j], fdf->map.points[i + 1][j], 0);
+	printf("oh GOD oh\n");
 			j++;
 		}
 		i++;

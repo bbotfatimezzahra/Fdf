@@ -1,5 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
+/* ************************************************************************** */ /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
@@ -12,15 +11,15 @@
 
 #include "fdf.h"
 
-int set_color(char *str, t_fdf *fdf)
+int	set_color(char *str)
 {
- int red;
-int green;
-int blue;
+	char	*color;
 
-if (!ft_strchr(str, ','))
- return (DEFAULT_COL);
-
+	color = ft_strchr(str, ','); 
+	if (!color)
+		return (GREEN);
+	return (ft_atoi_base(color, "0123456789abcdef"));
+}
 
 void	fill_row(char **rows, char **columns, int i, t_fdf *fdf)
 {
@@ -45,12 +44,7 @@ void	fill_row(char **rows, char **columns, int i, t_fdf *fdf)
 			free_double(columns);
 			terminate(ERR_MAP, fdf);
 		}
-		/*fdf->map.points[i][j].color = set_color(columns[j]);
-		if (ft_strchr(columns[j], ','))
-		{
-		tmp 
-		fdf->map.points[i][j].color = &ft_strchr(columns[j], ',')++;
-		 */
+		fdf->map.points[i][j].color = set_color(columns[j]);
 		j++;
 	}
 }

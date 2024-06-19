@@ -33,7 +33,7 @@
 # define ERR_MALLOC "Allocation failure"
 # define USR_INT "User interruption"
 
-# define WHITE 0x0000FF00
+# define GREEN 0x0000FF00
 
 # define DIS_WIDTH 1920
 # define DIS_LENGTH 1080
@@ -50,8 +50,6 @@ typedef struct s_map
 {
 	int		rows;
 	int		cols;
-	int		width;
-	int		length;
 	t_point	**points;
 }		t_map;
 
@@ -78,6 +76,7 @@ void	free_double(char **ptr);
 void	terminate(char *error, t_fdf *fdf);
 void	zoom(t_fdf *fdf, int a);
 char	**ft_split(const char *str, char c, int *length);
+int		ft_atoi_base(char *str, char *base);
 int		parse_map(char *file, t_fdf *fdf);
 void	start_display(t_fdf *fdf);
 void	fill_image(t_fdf *fdf);

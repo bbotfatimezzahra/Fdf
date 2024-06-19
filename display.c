@@ -38,7 +38,7 @@ void	start_display(t_fdf *fdf)
 	fdf->win = mlx_new_window(fdf->con, fdf->width, fdf->length, "FDF PROJECT");
 	if (!fdf->win)
 		terminate(ERR_WIN, fdf);
-	fdf->img = mlx_new_image(fdf->con, (fdf->map.rows + 1) * fdf->scale, (fdf->map.cols + 2) * fdf->scale);
+	fdf->img = mlx_new_image(fdf->con, fdf-> width, fdf->length);
 	if (!fdf->img)
 		terminate(ERR_IMG, fdf);
 	fdf->addr = mlx_get_data_addr(fdf->img, &fdf->bpp, &fdf->line_length, &fdf->endian);
