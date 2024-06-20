@@ -10,7 +10,7 @@
 /* ************************************************************************** */
 
 #include "fdf.h"
-
+#include <stdlib.h>
 int	set_color(char *str)
 {
 	char	*color;
@@ -19,6 +19,13 @@ int	set_color(char *str)
 	if (!color)
 		return (GREEN);
 	return (ft_atoi_base(&color[1], "0123456789abcdef"));
+}
+
+int	min(int a, int b)
+{
+	if (a < b)
+		return (a);
+	return (b);
 }
 
 void	fill_row(char **rows, char **columns, int i, t_fdf *fdf)
@@ -94,10 +101,9 @@ void	create_map(char *str, t_fdf *fdf)
 	}
 	fill_map(rows, fdf);
 	free_double(rows);
-	if ((fdf->map.rows >= 100) || (fdf->map.cols >= 100))
-		fdf->scale = 1;
-	fdf->width = (fdf->map.rows + 20) * fdf->scale;
-	fdf->length = (fdf->map.cols + 20) * fdf->scale;
+	fdf->scale = min((1920 - 40) / fdf->map.rows, (1080 - 40) / fdf->map.cols);
+	fdf->width = 1920;
+	fdf->length = 1080;
 	/*i = j = 0;
 	printf("this the map :\n");
 	while (i < fdf->map.rows)

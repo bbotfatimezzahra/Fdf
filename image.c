@@ -16,8 +16,8 @@ t_point	scale_point(t_point b, int scale)
 {
 	t_point	a;
 
-	a.x = b.x * scale;
-	a.y = b.y * scale;
+	a.x = b.x * scale + 50;
+	a.y = b.y * scale + 50;
 	a.color = b.color;
 	return (a);
 }
@@ -26,7 +26,7 @@ void	put_pixel(t_fdf *fdf, int x, int y, int color)
 {
 	char	*dst;
 
-	if (x < (fdf->width + 1) && y < (fdf->length + 1))
+	if (x >= 0 && y >= 0 && x < (fdf->width) && y < (fdf->length))
 	{
 		dst = fdf->addr + (y * fdf->line_length + x * (fdf->bpp / 8));
 		*(unsigned int *)dst = color;
@@ -37,7 +37,7 @@ void	angled_line(t_fdf *fdf, t_point a, t_point b)
 {
 	int	dx;
 	int	dy;
-	int	error;
+	int	error[2];
 	int	sx;
 	int	sy;
 
@@ -45,18 +45,18 @@ void	angled_line(t_fdf *fdf, t_point a, t_point b)
 	dy = -abs(b.y - a.y);
 	sx = (b.x > a.x) ? 1 : -1;
 	sy = (b.y > a.y) ? 1 : -1;
-	error = dx + dy;
+	error[0] = dx + dy;
 	while ((a.x != b.x) || (a.y != b.y))
 	{
 		put_pixel(fdf, a.x, a.y, a.color);
-		if (error * 2 >= dy)
+		if ((error[1] = error[0] * 2) > dy)
 		{
-			error += dy;
+			error[0] += dy;
 			a.x += sx;
 		}
-		if (error * 2 <= dx)
+		if (error[1] < dx)
 		{
-			error += dx;
+			error[0] += dx;
 			a.y += sy;
 		}
 	}
@@ -78,39 +78,58 @@ void	draw_background(t_fdf *fdf)
 	}
 }
 
+
+t_point	rotate_x(t_point a, int angle)
+{
+	int	y;
+	int	z;
+
+	y = a.y;
+	z = a.z;
+	a.y = y * cos(angle) - z * sin(angle);
+	a.z = y * sin(angle) + z * cos(angle);
+	return (a);
+}
+
+t_point	rotate_y(t_point a, int angle)
+{
+	int	x;
+	int	z;
+
+	x = a.x;
+	z = a.z;
+	a.x = x * cos(angle) + z * sin(angle);
+	a.z = -x * sin(angle) + z * cos(angle);
+	return (a);
+}
+
+t_point	rotate_z(t_point a, double angle)
+{
+	int	y;
+	int	x;
+
+	y = a.y;
+	x = a.x;
+	a.x = x * cos(angle) - y * sin(angle);
+	a.y = x * sin(angle) + y * cos(angle);
+	return (a);
+}
+
 void	draw_line(t_fdf *fdf, t_point a, t_point b, int projection)
 {
 	(void) projection;
 	a = scale_point(a, fdf->scale);
 	b = scale_point(b, fdf->scale);
+	//a = rotate_x(a, -45);
+	//b = rotate_x(b, -45);
+	
+	//a = rotate_y(a, -45);
+	//b = rotate_y(b, -45);
+	
+	//a = rotate_z(a, 45.5);
+	//b = rotate_z(b, 45.5);
 	angled_line(fdf, a, b);
 }
-/*	
-void	rotatex_map(t_fdf *fdf)
-{
-	int	i;
-	int	j;
-	int	*y;
-	int	*z;
-	t_point	*a;
-
-	i = 0;
-	while (i < fdf->map.rows)
-	{
-		j = 0;
-		while (j < fdf->map.cols)
-		{
-			a = &fdf->map.points[i][j]
-			y = &a.y;
-			z = &a.z;
-			y = a.y * cos(rad) - a.z * sin(rad);
-			z = a.y * sin(rad) + a.z * cos(rad);
-			j++;
-		}
-		i++;
-	}
-}
-*/
 void	fill_image(t_fdf *fdf)
 {
 	int		i;
