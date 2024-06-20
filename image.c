@@ -18,6 +18,7 @@ t_point	scale_point(t_point b, int scale)
 
 	a.x = b.x * scale;
 	a.y = b.y * scale;
+	a.color = b.color;
 	return (a);
 }
 
@@ -32,45 +33,31 @@ void	put_pixel(t_fdf *fdf, int x, int y, int color)
 	}
 }
 
-void	straight_line(t_fdf *fdf, t_point a, t_point b)
-{
-	t_point	c;
-
-	c = a;
-	if (a.x == b.x)
-	{
-		while (c.y != b.y)
-			put_pixel(fdf, c.x, ++c.y, c.color);
-	}
-	else if (a.y == b.y)
-	{
-		while (c.x != b.x)
-			put_pixel(fdf, ++c.x, c.y, c.color);
-	}
-}
-
 void	angled_line(t_fdf *fdf, t_point a, t_point b)
 {
-	int		dx;
-	int		dy;
-	int		p;
-	t_point	c;
+	int	dx;
+	int	dy;
+	int	error;
+	int	sx;
+	int	sy;
 
-	c = a;
-	dx = b.x - a.x;
-	dy = b.y - a.y;
-	p = 2 * dy - dx;
-	while ((c.x != b.x) || (c.y != b.y))
+	dx = abs(b.x - a.x);
+	dy = -abs(b.y - a.y);
+	sx = (b.x > a.x) ? 1 : -1;
+	sy = (b.y > a.y) ? 1 : -1;
+	error = dx + dy;
+	while ((a.x != b.x) || (a.y != b.y))
 	{
-		if (p > 0)
+		put_pixel(fdf, a.x, a.y, a.color);
+		if (error * 2 >= dy)
 		{
-			put_pixel(fdf, ++c.x, ++c.y, c.color);
-			p += 2 * dy - 2 * dx;
+			error += dy;
+			a.x += sx;
 		}
-		else
+		if (error * 2 <= dx)
 		{
-			put_pixel(fdf, ++c.x, c.y, c.color);
-			p += 2 * dy - dx;
+			error += dx;
+			a.y += sy;
 		}
 	}
 }
@@ -86,22 +73,17 @@ void	draw_background(t_fdf *fdf)
 	{
 		j = 0;
 		while (j < (fdf->length))
-			put_pixel(fdf, i, j++, 0x00000000);
+			put_pixel(fdf, i, j++, BLACK);
 		i++;
 	}
 }
 
 void	draw_line(t_fdf *fdf, t_point a, t_point b, int projection)
 {
-				printf("oh GOD\n");
 	(void) projection;
 	a = scale_point(a, fdf->scale);
 	b = scale_point(b, fdf->scale);
-//	if ((a.x != b.x) && (a.y != b.y))
-	printf("hello\n");
-		angled_line(fdf, a, b);
-//	else
-//		straight_line(fdf, a, b);
+	angled_line(fdf, a, b);
 }
 /*	
 void	rotatex_map(t_fdf *fdf)
@@ -123,8 +105,6 @@ void	rotatex_map(t_fdf *fdf)
 			z = &a.z;
 			y = a.y * cos(rad) - a.z * sin(rad);
 			z = a.y * sin(rad) + a.z * cos(rad);
-
-			
 			j++;
 		}
 		i++;
@@ -147,7 +127,6 @@ void	fill_image(t_fdf *fdf)
 				draw_line(fdf, fdf->map.points[i][j], fdf->map.points[i][j + 1], 0);
 			if ((i + 1) < fdf->map.rows)
 				draw_line(fdf, fdf->map.points[i][j], fdf->map.points[i + 1][j], 0);
-	printf("oh GOD oh\n");
 			j++;
 		}
 		i++;

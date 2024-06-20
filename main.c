@@ -23,8 +23,6 @@ void	init_fdf(t_fdf *fdf)
 	fdf->endian = 0;
 	fdf->map.rows = 0;
 	fdf->map.cols = 0;
-	fdf->map.width = 0;
-	fdf->map.length = 0;
 	fdf->map.points = NULL;
 	fdf->width = 0;
 	fdf->length = 0;

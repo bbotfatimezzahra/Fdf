@@ -18,7 +18,7 @@ int	set_color(char *str)
 	color = ft_strchr(str, ','); 
 	if (!color)
 		return (GREEN);
-	return (ft_atoi_base(color, "0123456789abcdef"));
+	return (ft_atoi_base(&color[1], "0123456789abcdef"));
 }
 
 void	fill_row(char **rows, char **columns, int i, t_fdf *fdf)
@@ -94,6 +94,8 @@ void	create_map(char *str, t_fdf *fdf)
 	}
 	fill_map(rows, fdf);
 	free_double(rows);
+	if ((fdf->map.rows >= 100) || (fdf->map.cols >= 100))
+		fdf->scale = 1;
 	fdf->width = (fdf->map.rows + 20) * fdf->scale;
 	fdf->length = (fdf->map.cols + 20) * fdf->scale;
 	/*i = j = 0;

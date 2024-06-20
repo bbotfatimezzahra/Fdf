@@ -33,7 +33,9 @@
 # define ERR_MALLOC "Allocation failure"
 # define USR_INT "User interruption"
 
+# define BLACK 0x00000000
 # define GREEN 0x0000FF00
+# define COLOR 0x00FF0000
 
 # define DIS_WIDTH 1920
 # define DIS_LENGTH 1080

@@ -37,7 +37,6 @@ void	str_tolower(char *str)
 
 int	skip_prefix(char *str, int i, int base)
 {
-	str_tolower(str);
 	if (str[i] == '0')
 	{
 		if (base == 2 && str[i + 1] == 'b')
@@ -71,17 +70,19 @@ int	convert_to_decimal(char *str, char *base)
 	int	converted;
 	int	length;
 	int	index;
+	int	i;
 
 	converted = 0;
 	length = 0;
+	i = 0;
 	while (base[length])
 		length++;
-	index = char_in_base(*str, base);
-	while (*str && index != -1)
+	index = char_in_base(str[i], base);
+	while (str[i] && index != -1)
 	{
 		converted = (converted * length) + index;
-		str++;
-		index = char_in_base(*str, base);
+		i++;
+		index = char_in_base(str[i], base);
 	}
 	return (converted);
 }
@@ -96,6 +97,8 @@ int	ft_atoi_base(char *str, char *base)
 	length = check_base(base);
 	if (length <= 1)
 		return (0);
+	str_tolower(str);
+	str_tolower(base);
 	sign = 1;
 	i = 0;
 	while ((str[i] >= 9 && str[i] <= 13) || str[i] == 32)
