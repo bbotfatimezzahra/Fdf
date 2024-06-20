@@ -52,6 +52,8 @@ typedef struct s_map
 {
 	int		rows;
 	int		cols;
+	int		x_offset;
+	int		y_offset;
 	t_point	**points;
 }		t_map;
 

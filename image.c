@@ -12,12 +12,12 @@
 
 #include "fdf.h"
 
-t_point	scale_point(t_point b, int scale)
+t_point	scale_point(t_point b, t_fdf *fdf)
 {
 	t_point	a;
 
-	a.x = b.x * scale + 50;
-	a.y = b.y * scale + 50;
+	a.x = b.x * fdf->scale + fdf->map.x_offset;
+	a.y = b.y * fdf->scale + fdf->map.y_offset;
 	a.color = b.color;
 	return (a);
 }
@@ -118,8 +118,8 @@ t_point	rotate_z(t_point a, double angle)
 void	draw_line(t_fdf *fdf, t_point a, t_point b, int projection)
 {
 	(void) projection;
-	a = scale_point(a, fdf->scale);
-	b = scale_point(b, fdf->scale);
+	a = scale_point(a, fdf);
+	b = scale_point(b, fdf);
 	//a = rotate_x(a, -45);
 	//b = rotate_x(b, -45);
 	

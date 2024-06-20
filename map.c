@@ -101,9 +101,11 @@ void	create_map(char *str, t_fdf *fdf)
 	}
 	fill_map(rows, fdf);
 	free_double(rows);
-	fdf->scale = min((1920 - 40) / fdf->map.rows, (1080 - 40) / fdf->map.cols);
-	fdf->width = 1920;
-	fdf->length = 1080;
+	fdf->scale = min((1700 - 10) / fdf->map.rows, (900 - 10) / fdf->map.cols);
+	fdf->width = 1700;
+	fdf->length = 900;
+	fdf->map.x_offset = fdf->width / 2 - fdf->map.rows * fdf->scale / 2;
+	fdf->map.y_offset = fdf->length / 2 - fdf->map.cols * fdf->scale / 2;
 	/*i = j = 0;
 	printf("this the map :\n");
 	while (i < fdf->map.rows)
