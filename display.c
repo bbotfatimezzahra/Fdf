@@ -6,7 +6,7 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 14:00:59 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/14 10:19:46 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/25 19:51:59 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	start_display(t_fdf *fdf)
 	if (!fdf->img)
 		terminate(ERR_IMG, fdf);
 	fdf->addr = mlx_get_data_addr(fdf->img, &fdf->bpp, &fdf->line_length, &fdf->endian);
-	fill_image(fdf);
+	fill_image(fdf, 1);
 	//mlx_mouse_hook(fdf->win, zoom, fdf);
 	mlx_hook(fdf->win, 2, 1L<<0, key_hook, fdf);
 	mlx_hook(fdf->win, 17, 1L<<2, destroy, fdf);

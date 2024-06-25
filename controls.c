@@ -6,7 +6,7 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:49:05 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/12 20:07:07 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/25 20:30:03 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 void	zoom(t_fdf *fdf, int a)
 {
 	if (a == 1)
-		fdf->scale += 10;
+		fdf->scale += 5;
 	if (a == 2)
-		fdf->scale -= 10;
-	fill_image(fdf);
+		fdf->scale -= 5;
+	draw_map(scale_map(*fdf));
 }

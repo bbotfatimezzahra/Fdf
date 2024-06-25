@@ -101,17 +101,16 @@ void	create_map(char *str, t_fdf *fdf)
 	}
 	fill_map(rows, fdf);
 	free_double(rows);
-	fdf->scale = min((1700 - 10) / fdf->map.rows, (900 - 10) / fdf->map.cols);
+	fdf->scale = min((fdf->width - 10) / fdf->map.rows, (fdf->length - 10) / fdf->map.cols);
+	fdf->scale /=2;
 	if (!fdf->scale)
 		fdf->scale = 1;
-	fdf->width = 1700;
-	fdf->length = 900;
 	int centerx = (fdf->map.points[fdf->map.rows - 1][0].x-fdf->map.points[0][0].x) * fdf->scale / 2;
 	int centery = (fdf->map.points[0][fdf->map.cols - 1].y-fdf->map.points[0][0].y) * fdf->scale / 2;
-	fdf->map.x_offset = (fdf->width / 2 );//- centerx;
-	fdf->map.y_offset = (fdf->length / 2 );//- centery;
-	fdf->map.z_offset = 1;
-	printf("scale %d width %d rows %d x %d length %d cols %d y %d\n",fdf->scale,fdf->width,fdf->map.rows,fdf->map.x_offset,fdf->length,fdf->map.cols,fdf->map.y_offset );
+	fdf->offset[0] = (fdf->width / 2 );//- centerx;
+	fdf->offset[1] = (fdf->length / 2 );//- centery;
+	fdf->offset[2] = 1;
+	printf("scale %d width %d rows %d x %d length %d cols %d y %d\n",fdf->scale,fdf->width,fdf->map.rows,fdf->offset[0],fdf->length,fdf->map.cols,fdf->offset[1] );
 	/*i = j = 0;
 	printf("this the map :\n");
 	while (i < fdf->map.rows)

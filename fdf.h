@@ -6,7 +6,7 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 22:48:16 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/25 18:18:44 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/25 21:23:01 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,6 @@ typedef struct s_map
 {
 	int		rows;
 	int		cols;
-	int		x_offset;
-	int		y_offset;
-	int		z_offset;
 	t_point	**points;
 }		t_map;
 
@@ -69,6 +66,7 @@ typedef struct s_fdf
 	int		line_length;
 	int		endian;
 	int		scale;
+	int		offset[3];
 	int		width;
 	int		length;
 	t_map	map;
@@ -85,5 +83,7 @@ char	**ft_split(const char *str, char c, int *length);
 int		ft_atoi_base(char *str, char *base);
 int		parse_map(char *file, t_fdf *fdf);
 void	start_display(t_fdf *fdf);
-void	fill_image(t_fdf *fdf);
+t_map	scale_map(t_map map, int scale);
+void	draw_map(t_fdf *fdf, t_map map);
+void	fill_image(t_fdf *fdf, int projection);
 #endif
