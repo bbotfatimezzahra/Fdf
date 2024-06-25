@@ -6,20 +6,30 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 14:08:58 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/14 10:32:44 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/25 18:18:43 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-t_point	scale_point(t_point b, t_fdf *fdf)
+void	scale_map(t_fdf *fdf)
 {
-	t_point	a;
+	int		i;
+	int		j;
 
-	a.x = b.x * fdf->scale + fdf->map.x_offset;
-	a.y = b.y * fdf->scale + fdf->map.y_offset;
-	a.color = b.color;
-	return (a);
+	i = 0;
+	while (i < fdf->map.rows)
+	{
+		j = 0;
+		while (j < fdf->map.cols)
+		{
+			fdf->map.points[i][j].x *= fdf->scale;
+			fdf->map.points[i][j].y *= fdf->scale;
+			fdf->map.points[i][j].z *= fdf->scale;
+			j++;
+		}
+		i++;
+	}
 }
 
 void	put_pixel(t_fdf *fdf, int x, int y, int color)
@@ -79,75 +89,160 @@ void	draw_background(t_fdf *fdf)
 }
 
 
-t_point	rotate_x(t_point a, int angle)
+void	rotate_x(t_fdf *fdf, double angle)
 {
-	int	y;
-	int	z;
+	t_point a;
+	int		i;
+	int		j;
+	int		y;
+	int		z;
 
-	y = a.y;
-	z = a.z;
-	a.y = y * cos(angle) - z * sin(angle);
-	a.z = y * sin(angle) + z * cos(angle);
-	return (a);
+	angle = angle * M_PI / 180;
+	i = 0;
+	while (i < fdf->map.rows)
+	{
+		j = 0;
+		while (j < fdf->map.cols)
+		{
+			a = fdf->map.points[i][j];
+			y = a.y;
+			z = a.z;
+			a.y = y * cos(angle) - z * sin(angle);
+			a.z = y * sin(angle) + z * cos(angle);
+			fdf->map.points[i][j] = a;
+			j++;
+		}
+		i++;
+	}
 }
 
-t_point	rotate_y(t_point a, int angle)
+void	rotate_y(t_fdf *fdf, double angle)
 {
-	int	x;
-	int	z;
+	t_point a;
+	int		i;
+	int		j;
+	int		x;
+	int		z;
 
-	x = a.x;
-	z = a.z;
-	a.x = x * cos(angle) + z * sin(angle);
-	a.z = -x * sin(angle) + z * cos(angle);
-	return (a);
+	angle = angle * M_PI / 180;
+	i = 0;
+	while (i < fdf->map.rows)
+	{
+		j = 0;
+		while (j < fdf->map.cols)
+		{
+			a = fdf->map.points[i][j];
+			x = a.x;
+			z = a.z;
+			a.x = x * cos(angle) + z * sin(angle);
+			a.z = -x * sin(angle) + z * cos(angle);
+			fdf->map.points[i][j] = a;
+			j++;
+		}
+		i++;
+	}
 }
 
-t_point	rotate_z(t_point a, double angle)
+void	rotate_z(t_fdf *fdf, double angle)
 {
-	int	y;
-	int	x;
+	t_point a;
+	int		i;
+	int		j;
+	int		x;
+	int		y;
 
-	y = a.y;
-	x = a.x;
-	a.x = x * cos(angle) - y * sin(angle);
-	a.y = x * sin(angle) + y * cos(angle);
-	return (a);
+	angle = angle * M_PI / 180;
+	i = 0;
+	while (i < fdf->map.rows)
+	{
+		j = 0;
+		while (j < fdf->map.cols)
+		{
+			a = fdf->map.points[i][j];
+			y = a.y;
+			x = a.x;
+			a.x = x * cos(angle) - y * sin(angle);
+			a.y = x * sin(angle) + y * cos(angle);
+			fdf->map.points[i][j] = a;
+			j++;
+		}
+		i++;
+	}
 }
 
-t_point	convert_iso(t_point a, t_fdf *fdf)
+void	translate_map(t_fdf *fdf)
+{
+	t_point	a;
+	int		i;
+	int		j;
+
+	i = 0;
+	while (i < fdf->map.rows)
+	{
+		j = 0;
+		while (j < fdf->map.cols)
+		{
+			a = fdf->map.points[i][j];
+			a.x += fdf->map.x_offset;
+			a.y += fdf->map.y_offset;
+			a.z += fdf->map.z_offset;
+			fdf->map.points[i][j] = a;
+			j++;
+		}
+		i++;
+	}
+}
+
+void	convert_iso(t_fdf *fdf)
 {
 	double	angle;
+	t_point	a;
 	t_point	b;
+	int		i;
+	int		j;
 
-	angle = 30 * (M_PI / 180);
-	b.x = fdf->scale * (a.x - a.y) * cos(0.98);// - a.z * sin(angle));
-	b.y = fdf->scale * ((a.x + a.y )* sin(0.88) - a.z);// * cos(angle));
-	b.x += fdf->map.x_offset;
-	b.y += fdf->map.y_offset;
-	
-	b.color = a.color;
-	return (b);
+	angle = 28.57 * M_PI / 180;
+	i = 0;
+	while (i < fdf->map.rows)
+	{
+		j = 0;
+		while (j < fdf->map.cols)
+		{
+			a = fdf->map.points[i][j];
+			b.x = (a.x + a.y) * cos(angle);// 0.98- a.z * sin(angle));
+			b.y = (a.x - a.y ) * sin(angle) - a.z;// 0.88* cos(angle));
+			b.color = a.color;
+			fdf->map.points[i][j] = b;
+			j++;
+		}
+		i++;
+	}
 }
 
 void	draw_line(t_fdf *fdf, t_point a, t_point b, int projection)
 {
-	(void) projection;				
-	a = convert_iso(a, fdf);
-	b = convert_iso(b, fdf);
+	(void) projection;
+/*	a.x -= fdf->map.rows/2;
+	a.y -= fdf->map.cols/2;
+	b.x -= fdf->map.rows/2;
+	b.y -= fdf->map.cols/2;
+*/
+//	a = convert_iso(a, fdf);
+//	b = convert_iso(b, fdf);
 	
-	//a = rotate_x(a, -45);
-//	b = rotate_x(b, -45);
+//	a = rotate_x(a, 135);
+//	b = rotate_x(b, 135);
 
 	//a = scale_point(a, fdf);
 	//b = scale_point(b, fdf);
 
-	//a = rotate_y(a, 45);
-	//b = rotate_y(b, 45);
-	//a = rotate_z(a, 45);
-//	b = rotate_z(b, 45);
-
-printf("a(%d,%d) b(%d,%d)\n",a.x,a.y,b.x,b.y);
+	//a = rotate_y(a, 135);
+	//b = rotate_y(b, 135);
+	//a = rotate_z(a, 135);
+	//b = rotate_z(b, 135);
+//	a.y *= -1;
+//	b.y *= -1;
+	
 	angled_line(fdf, a, b);
 }
 void	fill_image(t_fdf *fdf)
@@ -156,6 +251,13 @@ void	fill_image(t_fdf *fdf)
 	int		j;
 
 	draw_background(fdf);
+	//convert_iso(fdf);
+//	fdf->scale = 20;
+	rotate_x(fdf,30);
+	//rotate_y(fdf,330);
+	//rotate_z(fdf,30);
+	scale_map(fdf);
+	translate_map(fdf);
 	i = 0;
 	while (i < fdf->map.rows)
 	{

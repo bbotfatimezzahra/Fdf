@@ -6,7 +6,7 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 22:48:16 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/13 20:15:35 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/25 18:18:44 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <limits.h>
 # include <stdint.h>
 # include <math.h>
+# include <stdlib.h>
 
 # define ERR_USAGE "Usage : ./fdf Map_file(file.fdf)"
 # define ERR_MAP "Incorrect Map file"
@@ -54,6 +55,7 @@ typedef struct s_map
 	int		cols;
 	int		x_offset;
 	int		y_offset;
+	int		z_offset;
 	t_point	**points;
 }		t_map;
 
