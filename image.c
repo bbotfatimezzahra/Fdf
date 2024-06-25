@@ -115,19 +115,39 @@ t_point	rotate_z(t_point a, double angle)
 	return (a);
 }
 
+t_point	convert_iso(t_point a, t_fdf *fdf)
+{
+	double	angle;
+	t_point	b;
+
+	angle = 30 * (M_PI / 180);
+	b.x = fdf->scale * (a.x - a.y) * cos(0.98);// - a.z * sin(angle));
+	b.y = fdf->scale * ((a.x + a.y )* sin(0.88) - a.z);// * cos(angle));
+	b.x += fdf->map.x_offset;
+	b.y += fdf->map.y_offset;
+	
+	b.color = a.color;
+	return (b);
+}
+
 void	draw_line(t_fdf *fdf, t_point a, t_point b, int projection)
 {
-	(void) projection;
-	a = scale_point(a, fdf);
-	b = scale_point(b, fdf);
+	(void) projection;				
+	a = convert_iso(a, fdf);
+	b = convert_iso(b, fdf);
+	
 	//a = rotate_x(a, -45);
-	//b = rotate_x(b, -45);
-	
-	//a = rotate_y(a, -45);
-	//b = rotate_y(b, -45);
-	
-	//a = rotate_z(a, 45.5);
-	//b = rotate_z(b, 45.5);
+//	b = rotate_x(b, -45);
+
+	//a = scale_point(a, fdf);
+	//b = scale_point(b, fdf);
+
+	//a = rotate_y(a, 45);
+	//b = rotate_y(b, 45);
+	//a = rotate_z(a, 45);
+//	b = rotate_z(b, 45);
+
+printf("a(%d,%d) b(%d,%d)\n",a.x,a.y,b.x,b.y);
 	angled_line(fdf, a, b);
 }
 void	fill_image(t_fdf *fdf)
