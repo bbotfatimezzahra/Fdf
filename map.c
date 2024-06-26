@@ -1,31 +1,27 @@
-/* ************************************************************************** */ /*                                                                            */
+/* ************************************************************************** */
+/*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:50:44 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/13 20:15:34 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/26 19:19:25 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-int	set_color(char *str)
+void	fill_point(char *column, int i, int j, t_fdf *fdf)
 {
-	char	*color;
-
-	color = ft_strchr(str, ','); 
-	if (!color)
-		return (GREEN);
-	return (ft_atoi_base(&color[1], "0123456789abcdef"));
-}
-
-int	min(int a, int b)
-{
-	if (a < b)
-		return (a);
-	return (b);
+	fdf->map.points[i][j].x = j;
+	fdf->map.points[i][j].y = i;
+	fdf->map.points[i][j].z = ft_atoi(column);
+	fdf->map.points[i][j].color = set_color(column);
+	fdf->map.tmps[i][j].x = j;
+	fdf->map.tmps[i][j].y = i;
+	fdf->map.tmps[i][j].z = ft_atoi(column);
+	fdf->map.tmps[i][j].color = set_color(column);
 }
 
 void	fill_row(char **rows, char **columns, int i, t_fdf *fdf)
@@ -43,24 +39,16 @@ void	fill_row(char **rows, char **columns, int i, t_fdf *fdf)
 	j = 0;
 	while (j < fdf->map.cols)
 	{
-		fdf->map.points[i][j].x = i;
-		fdf->map.points[i][j].y = j;
-		fdf->map.points[i][j].z = ft_atoi(columns[j]);
-		if (!fdf->map.points[i][j].z && (columns[j][0] != '0'))
+		if (!ft_atoi(columns[j]) && (columns[j][0] != '0'))
 		{
 			free_double(rows);
 			free_double(columns);
 			terminate(ERR_MAP, fdf);
 		}
+		fill_point(columns[j], i, j, fdf);
 		if (fdf->map.points[i][j].z > fdf->z_divisor[0])
 			fdf->z_divisor[0] = fdf->map.points[i][j].z;
-		if (fdf->map.points[i][j].z < fdf->z_divisor[1])
-			fdf->z_divisor[1] = fdf->map.points[i][j].z;
-		fdf->map.points[i][j].color = set_color(columns[j]);
-		fdf->map.tmps[i][j].x = i;
-		fdf->map.tmps[i][j].y = j;
-		fdf->map.tmps[i][j].z = ft_atoi(columns[j]);
-		fdf->map.tmps[i][j].color = set_color(columns[j]);
+		fdf->z_divisor[1] = min(ft_atoi(columns[j]), fdf->z_divisor[1]);
 		j++;
 	}
 }
@@ -83,12 +71,6 @@ void	fill_map(char **rows, t_fdf *fdf)
 		fill_row(rows, columns, i, fdf);
 		free_double(columns);
 		columns = ft_split(rows[++i], ' ', &tmp);
-		if (tmp != fdf->map.cols)
-		{
-			free_double(rows);
-			free_double(columns);
-			terminate(ERR_MAP, fdf);
-		}
 	}
 	fdf->map.points[i] = NULL;
 	fdf->map.tmps[i] = NULL;
@@ -112,31 +94,10 @@ void	create_map(char *str, t_fdf *fdf)
 	}
 	fill_map(rows, fdf);
 	free_double(rows);
-	fdf->scale = min((fdf->width - 10) / fdf->map.rows, (fdf->length - 10) / fdf->map.cols);
-	fdf->scale /=2;
-	if (!fdf->scale)
-		fdf->scale = 1;
-	int centerx = (fdf->map.points[fdf->map.rows - 1][0].x-fdf->map.points[0][0].x) * fdf->scale / 2;
-	int centery = (fdf->map.points[0][fdf->map.cols - 1].y-fdf->map.points[0][0].y) * fdf->scale / 2;
-	fdf->offset[0] = (fdf->width / 2 );//- centerx;
-	fdf->offset[1] = (fdf->length / 2 );//- centery;
-	fdf->offset[2] = 0;
-	printf("map width %d length %d\n",fdf->width,fdf->length);
-	fdf->z_divisor[2] = fdf->length/3 / (fdf->z_divisor[0] - fdf->z_divisor[1]);
-	printf("scale %d width %d rows %d offsetx %d length %d cols %d offsety %dzmax %d zmin %d z %d\n",fdf->scale,fdf->width,fdf->map.rows,fdf->offset[0],fdf->length,fdf->map.cols,fdf->offset[1],fdf->z_divisor[0],fdf->z_divisor[1],fdf->z_divisor[2] );
-	/*i = j = 0;
-	printf("this the map :\n");
-	while (i < fdf->map.rows)
-	{
-		j = 0;
-		while (j < fdf->map.cols)
-		{
-			printf("%d ",fdf->map.points[i][j].z);
-			j++;
-		}
-		printf("\n");
-		i++;
-	}*/
+	count_scale(fdf);
+	count_divisor(fdf);
+	fdf->offset[0] = fdf->width / 2;
+	fdf->offset[1] = fdf->length / 2;
 }
 
 int	parse_map(char *file, t_fdf *fdf)

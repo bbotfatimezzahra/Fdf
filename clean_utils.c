@@ -6,7 +6,7 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 22:54:34 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/26 12:44:15 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/26 18:14:58 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,22 +39,28 @@ void	free_double(char **ptr)
 	free(ptr);
 }
 
-void	terminate(char *error, t_fdf *fdf)
+void	free_maps(t_fdf *fdf)
 {
 	int	i;
 
-	i = -1;
-	while (++i < fdf->map.rows)
+	i = 0;
+	while (i < fdf->map.rows)
 	{
 		if (fdf->map.points[i])
 			free(fdf->map.points[i]);
 		if (fdf->map.tmps[i])
 			free(fdf->map.tmps[i]);
+		i++;
 	}
 	if (fdf->map.points)
 		free(fdf->map.points);
 	if (fdf->map.tmps)
 		free(fdf->map.tmps);
+}
+
+void	terminate(char *error, t_fdf *fdf)
+{
+	free_maps(fdf);
 	if (fdf->img)
 		mlx_destroy_image(fdf->con, fdf->img);
 	if (fdf->win)

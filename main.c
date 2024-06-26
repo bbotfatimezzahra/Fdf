@@ -6,7 +6,7 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 10:31:34 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/26 13:53:20 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/26 16:49:26 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ void	init_fdf(t_fdf *fdf)
 	fdf->angle[0] = 0;
 	fdf->angle[1] = 0;
 	fdf->angle[2] = 0;
-	fdf->project = 1;
 }
 
 int	main(int argc, char **argv)

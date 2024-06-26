@@ -6,7 +6,7 @@
 #    By: fbbot <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/31 11:40:05 by fbbot             #+#    #+#              #
-#    Updated: 2024/06/12 20:08:15 by fbbot            ###   ########.fr        #
+#    Updated: 2024/06/26 18:26:04 by fbbot            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ CC	= gcc
 CFLAGS	= -Wall -Wextra -Werror 
 LFLAGS	= -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz 
 SRC	= main.c map.c display.c image.c clean_utils.c str_utils.c map_utils.c\
-	ft_split.c controls.c ft_atoi_base.c\
+	ft_split.c controls.c ft_atoi_base.c transform.c image_utils.c\
 	Get_next_line/get_next_line_utils.c Get_next_line/get_next_line.c 
 OBJ	= $(SRC:%.c=%.o)
 

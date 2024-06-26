@@ -1,26 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_atoi_base.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/26 18:27:32 by fbbot             #+#    #+#             */
+/*   Updated: 2024/06/26 18:27:35 by fbbot            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fdf.h"
-
-int	check_base(char *base)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (base[i])
-	{
-		if (base[i] == '-' || base[i] == '+' || base[i] <= 32 || base[i] > 126)
-			return (0);
-		j = i + 1;
-		while (base[j])
-		{
-			if (base[i] == base[j])
-				return (0);
-			j++;
-		}
-		i++;
-	}
-	return (i);
-}
 
 void	str_tolower(char *str)
 {
@@ -92,11 +82,7 @@ int	ft_atoi_base(char *str, char *base)
 	int		sign;
 	int		result;
 	int		i;
-	int		length;
 
-	length = check_base(base);
-	if (length <= 1)
-		return (0);
 	str_tolower(str);
 	str_tolower(base);
 	sign = 1;
@@ -109,7 +95,7 @@ int	ft_atoi_base(char *str, char *base)
 			sign *= -1;
 		i++;
 	}
-	if (skip_prefix(str, i, length))
+	if (skip_prefix(str, i, 16))
 		i += 2;
 	result = convert_to_decimal(&str[i], base);
 	return (result * sign);
