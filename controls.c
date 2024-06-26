@@ -6,7 +6,7 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:49:05 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/26 19:21:51 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/26 23:17:42 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,17 +45,17 @@ void	angle(float *angle, float value)
 
 void	rotate(t_fdf *fdf, int a)
 {
-	if (a == XK_8 || a == XK_KP_8)
+	if (a == XK_x || a == XK_X)
 		angle(&fdf->angle[0], 0.5);
-	if (a == XK_2 || a == XK_KP_2)
+	if (a == XK_s || a == XK_S)
 		angle(&fdf->angle[0], -0.5);
-	if (a == XK_4 || a == XK_KP_4)
+	if (a == XK_y || a == XK_Y)
 		angle(&fdf->angle[1], 0.5);
-	if (a == XK_6 || a == XK_KP_6)
+	if (a == XK_h || a == XK_Y)
 		angle(&fdf->angle[1], -0.5);
-	if (a == XK_1 || a == XK_KP_1)
+	if (a == XK_z || a == XK_Z)
 		angle(&fdf->angle[2], 0.5);
-	if (a == XK_9 || a == XK_KP_9)
+	if (a == XK_a || a == XK_A)
 		angle(&fdf->angle[2], -0.5);
 	fill_image(fdf);
 }

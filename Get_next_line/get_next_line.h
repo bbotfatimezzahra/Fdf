@@ -6,7 +6,7 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 13:43:57 by fbbot             #+#    #+#             */
-/*   Updated: 2024/03/19 15:50:53 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/26 23:43:10 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <unistd.h>
 # include <fcntl.h>
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 4
+#  define BUFFER_SIZE 1000000000
 # endif
 
 char	*get_next_line(int fd);

@@ -6,7 +6,7 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 13:44:04 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/26 19:19:23 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/27 00:27:04 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,5 +47,5 @@ void	count_divisor(t_fdf *fdf)
 
 	range = fdf->z_divisor[0] - fdf->z_divisor[1];
 	if (range)
-		fdf->z_divisor[2] = fdf->length / 4 / range;
+		fdf->z_divisor[2] = fdf->length / 4/range;
 }

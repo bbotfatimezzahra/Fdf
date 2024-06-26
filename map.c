@@ -6,7 +6,7 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:50:44 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/26 19:19:25 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/26 23:50:40 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,33 +53,35 @@ void	fill_row(char **rows, char **columns, int i, t_fdf *fdf)
 	}
 }
 
-void	fill_map(char **rows, t_fdf *fdf)
+void	fill_map(char **rows, char **columns, t_fdf *fdf)
 {
-	char	**columns;
 	int		i;
 	int		tmp;
 
-	columns = ft_split(rows[0], ' ', &fdf->map.cols);
-	if (!columns)
-	{
-		free_double(rows);
-		terminate(ERR_MALLOC, fdf);
-	}
+	
 	i = 0;
 	while (i < fdf->map.rows)
 	{
 		fill_row(rows, columns, i, fdf);
 		free_double(columns);
 		columns = ft_split(rows[++i], ' ', &tmp);
+		if (columns && tmp != fdf->map.cols)
+		{
+			free_double(rows);
+			free_double(columns);
+			terminate(ERR_MAP,fdf);
+		}
 	}
 	fdf->map.points[i] = NULL;
 	fdf->map.tmps[i] = NULL;
 	free_double(columns);
+	free_double(rows);
 }
 
 void	create_map(char *str, t_fdf *fdf)
 {
 	char	**rows;
+	char	**columns;
 
 	rows = ft_split(str, '\n', &fdf->map.rows);
 	free(str);
@@ -92,8 +94,13 @@ void	create_map(char *str, t_fdf *fdf)
 		free_double(rows);
 		terminate(ERR_MALLOC, fdf);
 	}
-	fill_map(rows, fdf);
-	free_double(rows);
+	columns = ft_split(rows[0], ' ', &fdf->map.cols);
+	if (!columns)
+	{
+		free_double(rows);
+		terminate(ERR_MALLOC, fdf);
+	}
+	fill_map(rows, columns, fdf);
 	count_scale(fdf);
 	count_divisor(fdf);
 	fdf->offset[0] = fdf->width / 2;

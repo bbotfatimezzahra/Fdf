@@ -6,7 +6,7 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 14:00:59 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/26 18:30:50 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/26 23:17:07 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@ int	key_hook(int keysym, t_fdf *fdf)
 	if (keysym == XK_Down || keysym == XK_Up
 		|| keysym == XK_Left || keysym == XK_Right)
 		move(fdf, keysym);
-	if (keysym == XK_1 || keysym == XK_2 || keysym == XK_4
-		|| keysym == XK_6 || keysym == XK_8 || keysym == XK_9)
+	if (keysym == XK_z || keysym == XK_Z || keysym == XK_a
+		|| keysym == XK_A || keysym == XK_x || keysym == XK_X)
 		rotate(fdf, keysym);
-	if (keysym == XK_KP_1 || keysym == XK_KP_2 || keysym == XK_KP_4
-		|| keysym == XK_KP_6 || keysym == XK_KP_8 || keysym == XK_KP_9)
+	if (keysym == XK_s || keysym == XK_S || keysym == XK_y
+		|| keysym == XK_Y || keysym == XK_h || keysym == XK_H)
 		rotate(fdf, keysym);
 	if (keysym == XK_b || keysym == XK_B)
 		reset(fdf, keysym);
