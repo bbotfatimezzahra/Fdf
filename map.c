@@ -33,7 +33,8 @@ void	fill_row(char **rows, char **columns, int i, t_fdf *fdf)
 	int	j;
 
 	fdf->map.points[i] = ft_calloc((fdf->map.cols), sizeof(t_point));
-	if (!fdf->map.points[i])
+	fdf->map.tmps[i] = ft_calloc((fdf->map.cols), sizeof(t_point));
+	if (!fdf->map.points[i] || !fdf->map.tmps[i])
 	{
 		free_double(rows);
 		free_double(columns);
@@ -51,7 +52,15 @@ void	fill_row(char **rows, char **columns, int i, t_fdf *fdf)
 			free_double(columns);
 			terminate(ERR_MAP, fdf);
 		}
+		if (fdf->map.points[i][j].z > fdf->z_divisor[0])
+			fdf->z_divisor[0] = fdf->map.points[i][j].z;
+		if (fdf->map.points[i][j].z < fdf->z_divisor[1])
+			fdf->z_divisor[1] = fdf->map.points[i][j].z;
 		fdf->map.points[i][j].color = set_color(columns[j]);
+		fdf->map.tmps[i][j].x = i;
+		fdf->map.tmps[i][j].y = j;
+		fdf->map.tmps[i][j].z = ft_atoi(columns[j]);
+		fdf->map.tmps[i][j].color = set_color(columns[j]);
 		j++;
 	}
 }
@@ -82,6 +91,7 @@ void	fill_map(char **rows, t_fdf *fdf)
 		}
 	}
 	fdf->map.points[i] = NULL;
+	fdf->map.tmps[i] = NULL;
 	free_double(columns);
 }
 
@@ -94,7 +104,8 @@ void	create_map(char *str, t_fdf *fdf)
 	if (!rows)
 		terminate(ERR_MALLOC, fdf);
 	fdf->map.points = ft_calloc((fdf->map.rows + 1), sizeof(t_point *));
-	if (!fdf->map.points)
+	fdf->map.tmps = ft_calloc((fdf->map.rows + 1), sizeof(t_point *));
+	if (!fdf->map.points || !fdf->map.tmps)
 	{
 		free_double(rows);
 		terminate(ERR_MALLOC, fdf);
@@ -109,8 +120,9 @@ void	create_map(char *str, t_fdf *fdf)
 	int centery = (fdf->map.points[0][fdf->map.cols - 1].y-fdf->map.points[0][0].y) * fdf->scale / 2;
 	fdf->offset[0] = (fdf->width / 2 );//- centerx;
 	fdf->offset[1] = (fdf->length / 2 );//- centery;
-	fdf->offset[2] = 1;
-	printf("scale %d width %d rows %d x %d length %d cols %d y %d\n",fdf->scale,fdf->width,fdf->map.rows,fdf->offset[0],fdf->length,fdf->map.cols,fdf->offset[1] );
+	fdf->offset[2] = 0;
+	fdf->z_divisor[2] = fdf->length/3 / (fdf->z_divisor[0] - fdf->z_divisor[1]);
+	printf("scale %d width %d rows %d offsetx %d length %d cols %d offsety %dzmax %d zmin %d z %d\n",fdf->scale,fdf->width,fdf->map.rows,fdf->offset[0],fdf->length,fdf->map.cols,fdf->offset[1],fdf->z_divisor[0],fdf->z_divisor[1],fdf->z_divisor[2] );
 	/*i = j = 0;
 	printf("this the map :\n");
 	while (i < fdf->map.rows)

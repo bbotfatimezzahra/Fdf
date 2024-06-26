@@ -6,32 +6,32 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 14:08:58 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/25 21:25:14 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/26 01:26:06 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-t_map	scale_map(t_map map, int scale)
+void	scale_map(t_fdf *fdf)
 {
 	int		i;
 	int		j;
 
 	i = 0;
-	while (i < map.rows)
+	if (fdf->scale <= 0)
+		fdf->scale = 1;
+	while (i < fdf->map.rows)
 	{
 		j = 0;
-		while (j < map.cols)
+		while (j < fdf->map.cols)
 		{
-			map.points[i][j].x *= scale;
-			map.points[i][j].y *= scale;
-			map.points[i][j].z *= scale;
+			fdf->map.tmps[i][j].x = fdf->map.points[i][j].x * fdf->scale;
+			fdf->map.tmps[i][j].y = fdf->map.points[i][j].y * fdf->scale;
+			fdf->map.tmps[i][j].z = (fdf->map.points[i][j].z - fdf->z_divisor[1])*fdf->z_divisor[2];
 			j++;
 		}
 		i++;
 	}
-	printf("SCALE FUNC\n");
-	return (map);
 }
 
 void	put_pixel(t_fdf *fdf, int x, int y, int color)
@@ -53,7 +53,7 @@ void	draw_line(t_fdf *fdf, t_point a, t_point b)
 	int	sx;
 	int	sy;
 
-	printf("a(%d, %d) b(%d, %d)\n",a.x,a.y,b.x,b.y);
+//	printf("a(%d, %d) b(%d, %d)\n",a.x,a.y,b.x,b.y);
 	dx = abs(b.x - a.x);
 	dy = -abs(b.y - a.y);
 	sx = (b.x > a.x) ? 1 : -1;
@@ -85,7 +85,7 @@ void	draw_background(t_fdf *fdf)
 	while (i < (fdf->width))
 	{
 		j = 0;
-		printf("background\n");
+//		printf("background\n");
 		while (j < (fdf->length))
 			put_pixel(fdf, i, j++, BLACK);
 		i++;
@@ -93,7 +93,7 @@ void	draw_background(t_fdf *fdf)
 }
 
 
-t_map	rotate_x(t_map map, double angle)
+void	rotate_x(t_fdf *fdf, double angle)
 {
 	t_point a;
 	int		i;
@@ -103,25 +103,24 @@ t_map	rotate_x(t_map map, double angle)
 
 	angle = angle * M_PI / 180;
 	i = 0;
-	while (i < map.rows)
+	while (i < fdf->map.rows)
 	{
 		j = 0;
-		while (j < map.cols)
+		while (j < fdf->map.cols)
 		{
-			a = map.points[i][j];
+			a = fdf->map.tmps[i][j];
 			y = a.y;
 			z = a.z;
 			a.y = y * cos(angle) - z * sin(angle);
 			a.z = y * sin(angle) + z * cos(angle);
-			map.points[i][j] = a;
+			fdf->map.tmps[i][j] = a;
 			j++;
 		}
 		i++;
 	}
-	return (map);
 }
 
-t_map	rotate_y(t_map map, double angle)
+void	rotate_y(t_fdf *fdf, double angle)
 {
 	t_point a;
 	int		i;
@@ -131,25 +130,24 @@ t_map	rotate_y(t_map map, double angle)
 
 	angle = angle * M_PI / 180;
 	i = 0;
-	while (i < map.rows)
+	while (i < fdf->map.rows)
 	{
 		j = 0;
-		while (j < map.cols)
+		while (j < fdf->map.cols)
 		{
-			a = map.points[i][j];
+			a = fdf->map.tmps[i][j];
 			x = a.x;
 			z = a.z;
 			a.x = x * cos(angle) + z * sin(angle);
 			a.z = -x * sin(angle) + z * cos(angle);
-			map.points[i][j] = a;
+			fdf->map.tmps[i][j] = a;
 			j++;
 		}
 		i++;
 	}
-	return (map);
 }
 
-t_map	rotate_z(t_map map, double angle)
+void	rotate_z(t_fdf *fdf, double angle)
 {
 	t_point a;
 	int		i;
@@ -159,73 +157,71 @@ t_map	rotate_z(t_map map, double angle)
 
 	angle = angle * M_PI / 180;
 	i = 0;
-	while (i < map.rows)
+	while (i < fdf->map.rows)
 	{
 		j = 0;
-		while (j < map.cols)
+		while (j < fdf->map.cols)
 		{
-			a = map.points[i][j];
+			a = fdf->map.tmps[i][j];
 			y = a.y;
 			x = a.x;
 			a.x = x * cos(angle) - y * sin(angle);
 			a.y = x * sin(angle) + y * cos(angle);
-			map.points[i][j] = a;
+			fdf->map.tmps[i][j] = a;
 			j++;
 		}
 		i++;
 	}
-	return (map);
 }
 
-t_map	translate_map(t_map map,int offset[3])
+void	translate_map(t_fdf *fdf)
 {
 	t_point	a;
 	int		i;
 	int		j;
 
-	printf("translate 1\n");
+	//printf("translate 1\n");
 	i = 0;
-	while (i < map.rows)
+	while (i < fdf->map.rows)
 	{
 		j = 0;
-		while (j < map.cols)
+		while (j < fdf->map.cols)
 		{
-			a = map.points[i][j];
-			a.x += offset[0];
-			a.y += offset[1];
-			a.z += offset[2];
-			map.points[i][j] = a;
+			a = fdf->map.tmps[i][j];
+			a.x += fdf->offset[0];
+			a.y += fdf->offset[1];
+			a.z += fdf->offset[2];
+			fdf->map.tmps[i][j] = a;
 			j++;
 		}
 		i++;
 	}
 }
 
-t_map	center_map(t_map map, int scale)
+void	center_map(t_fdf *fdf)
 {
 	int		i;
 	int		j;
 	t_point	a;
 
 	i = 0;
-	while (i < map.rows)
+	while (i < fdf->map.rows)
 	{
 		j = 0;
-		while (j < map.cols)
+		while (j < fdf->map.cols)
 		{
-			a = map.points[i][j];
-			a.x -= (map.rows * scale)/2;
-			a.y -= (map.cols * scale)/2;
-			map.points[i][j] = a;
+			a = fdf->map.tmps[i][j];
+			a.x -= (fdf->map.rows * fdf->scale)/2;
+			a.y -= (fdf->map.cols * fdf->scale)/2;
+			fdf->map.tmps[i][j] = a;
 			j++;
 		}
 		i++;
 	}
-	printf("center 2\n");
-	return (map);
+//	printf("center 2\n");
 }
 
-t_map	convert_iso(t_map map)
+void	convert_iso(t_fdf *fdf)
 {
 	double	angle;
 	t_point	a;
@@ -235,24 +231,24 @@ t_map	convert_iso(t_map map)
 
 	angle = 28.57 * M_PI / 180;
 	i = 0;
-	while (i < map.rows)
+	while (i < fdf->map.rows)
 	{
 		j = 0;
-		while (j < map.cols)
+		while (j < fdf->map.cols)
 		{
-			a = map.points[i][j];
+			a = fdf->map.tmps[i][j];
 			b.x = (a.x + a.y) * cos(angle);// 0.98- a.z * sin(angle));
 			b.y = (a.x - a.y ) * sin(angle) - a.z;// 0.88* cos(angle));
+			b.z = a.z;
 			b.color = a.color;
-			map.points[i][j] = b;
+			fdf->map.tmps[i][j] = b;
 			j++;
 		}
 		i++;
 	}
-	return (map);
 }
 
-t_map	convert_par(t_map map)
+void	convert_par(t_fdf *fdf)
 {
 	t_point	a;
 	t_point	b;
@@ -260,47 +256,47 @@ t_map	convert_par(t_map map)
 	int		j;
 
 	i = 0;
-	while (i < map.rows)
+	while (i < fdf->map.rows)
 	{
 		j = 0;
-		while (j < map.cols)
+		while (j < fdf->map.cols)
 		{
-			a = map.points[i][j];
+			a = fdf->map.tmps[i][j];
 			b.x = (a.x + a.y);
 			b.y = (a.x - a.y ) - a.z;
+			b.z = a.z;
 			b.color = a.color;
-			map.points[i][j] = b;
+			fdf->map.tmps[i][j] = b;
 			j++;
 		}
 		i++;
 	}
-	return (map);
 }
 
-void	draw_map(t_fdf *fdf, t_map map)
+void	draw_map(t_fdf *fdf)
 {
 	t_point	a;
 	int		i;
 	int		j;
 
 	draw_background(fdf);
-	printf("draw map 1\n");
+//	printf("draw map 1\n");
 	i = 0;
-	while (i < map.rows)
+	while (i < fdf->map.rows)
 	{
 		j = 0;
-		while (j < map.cols)
+		while (j < fdf->map.cols)
 		{
-			a = map.points[i][j];
-			if ((j + 1) < map.cols)
-				draw_line(fdf, a, map.points[i][j + 1]);
-			if ((i + 1) < map.rows)
-				draw_line(fdf, a, map.points[i + 1][j]);
+			a = fdf->map.tmps[i][j];
+			if ((j + 1) < fdf->map.cols)
+				draw_line(fdf, a, fdf->map.tmps[i][j + 1]);
+			if ((i + 1) < fdf->map.rows)
+				draw_line(fdf, a, fdf->map.tmps[i + 1][j]);
 			j++;
 		}
 		i++;
 	}
-	printf("draw map 2\n");
+//	printf("draw map 2\n");
 	mlx_put_image_to_window(fdf->con, fdf->win, fdf->img, 0, 0);
 }
 
@@ -308,17 +304,23 @@ void	fill_image(t_fdf *fdf, int projection)
 {
 	t_map	map;
 
-	map = scale_map(fdf->map, fdf->scale);
-	printf("hello\n");
-	map = center_map(map, fdf->scale);
-	printf("hi\n");
+	scale_map(fdf);
+	printf("====================scale\n");
+	printf("fdf a(%d,%d,%d) map b(%d,%d,%d)\n",fdf->map.points[0][0].x,fdf->map.points[0][0].y,fdf->map.points[0][0].z,fdf->map.tmps[0][0].x,fdf->map.tmps[0][0].y,fdf->map.tmps[0][0].z);
+	center_map(fdf);
+	printf("====================center\n");
+	printf("fdf a(%d,%d,%d) map b(%d,%d,%d)\n",fdf->map.points[0][0].x,fdf->map.points[0][0].y,fdf->map.points[0][0].z,fdf->map.tmps[0][0].x,fdf->map.tmps[0][0].y,fdf->map.tmps[0][0].z);
 	if (projection == 1)
-		map = convert_iso(map);
+		convert_iso(fdf);
 	else if (projection == 2)
-		map = convert_par(map);
+		convert_par(fdf);
+	printf("====================projection\n");
+	printf("fdf a(%d,%d,%d) map b(%d,%d,%d)\n",fdf->map.points[0][0].x,fdf->map.points[0][0].y,fdf->map.points[0][0].z,fdf->map.tmps[0][0].x,fdf->map.tmps[0][0].y,fdf->map.tmps[0][0].z);
 	//rotate_x(fdf,30);
 	//rotate_y(fdf,330);
 	//rotate_z(fdf,30);
-	map = translate_map(map,fdf->offset);
-	draw_map(fdf, map);
+	translate_map(fdf);
+	draw_map(fdf);
+	printf("====================drawing\n");
+	printf("fdf a(%d,%d,%d) map b(%d,%d,%d)\n",fdf->map.points[0][0].x,fdf->map.points[0][0].y,fdf->map.points[0][0].z,fdf->map.tmps[0][0].x,fdf->map.tmps[0][0].y,fdf->map.tmps[0][0].z);
 }

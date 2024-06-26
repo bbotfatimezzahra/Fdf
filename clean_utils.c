@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   clean_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 22:54:34 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/12 10:37:59 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/26 00:19:46 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,12 @@ void	terminate(char *error, t_fdf *fdf)
 		while (i < fdf->map.rows)
 			free(fdf->map.points[i++]);
 		free(fdf->map.points);
+	}
+	if (fdf->map.tmps)
+	{
+		while (i < fdf->map.rows)
+			free(fdf->map.tmps[i++]);
+		free(fdf->map.tmps);
 	}
 	if (fdf->img)
 		mlx_destroy_image(fdf->con, fdf->img);
