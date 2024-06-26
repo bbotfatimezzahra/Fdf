@@ -6,7 +6,7 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 22:48:16 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/26 01:20:49 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/26 13:53:19 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,10 @@ typedef struct s_fdf
 	int		scale;
 	int		offset[3];
 	int		z_divisor[3];
+	float		angle[3];
 	int		width;
 	int		length;
+	int		project;
 	t_map	map;
 }			t_fdf;
 
@@ -81,11 +83,14 @@ int		ft_atoi(const char *str);
 void	free_double(char **ptr);
 void	terminate(char *error, t_fdf *fdf);
 void	zoom(t_fdf *fdf, int a);
+void	move(t_fdf *fdf, int a);
+void	rotate(t_fdf *fdf, int a);
+void	project(t_fdf *fdf, int a);
 char	**ft_split(const char *str, char c, int *length);
 int		ft_atoi_base(char *str, char *base);
 int		parse_map(char *file, t_fdf *fdf);
 void	start_display(t_fdf *fdf);
 void	scale_map(t_fdf *fdf);
 void	draw_map(t_fdf *fdf);
-void	fill_image(t_fdf *fdf, int projection);
+void	fill_image(t_fdf *fdf);
 #endif

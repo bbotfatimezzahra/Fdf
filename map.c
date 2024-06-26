@@ -121,6 +121,7 @@ void	create_map(char *str, t_fdf *fdf)
 	fdf->offset[0] = (fdf->width / 2 );//- centerx;
 	fdf->offset[1] = (fdf->length / 2 );//- centery;
 	fdf->offset[2] = 0;
+	printf("map width %d length %d\n",fdf->width,fdf->length);
 	fdf->z_divisor[2] = fdf->length/3 / (fdf->z_divisor[0] - fdf->z_divisor[1]);
 	printf("scale %d width %d rows %d offsetx %d length %d cols %d offsety %dzmax %d zmin %d z %d\n",fdf->scale,fdf->width,fdf->map.rows,fdf->offset[0],fdf->length,fdf->map.cols,fdf->offset[1],fdf->z_divisor[0],fdf->z_divisor[1],fdf->z_divisor[2] );
 	/*i = j = 0;
