@@ -14,9 +14,9 @@
 
 void	zoom(t_fdf *fdf, int a)
 {
-	if (a == XK_KP_Add || a == XK_plus)
+	if (a == XK_i || a == XK_I)
 		fdf->scale += 1;
-	if (a == XK_KP_Subtract || a == XK_minus)
+	if (a == XK_o || a == XK_O)
 		fdf->scale -= 1;
 	fill_image(fdf);
 }
@@ -67,6 +67,10 @@ void	reset(t_fdf *fdf, int a)
 		fdf->angle[0] = 0;
 		fdf->angle[1] = 0;
 		fdf->angle[2] = 0;
+		count_scale(fdf);
+		count_divisor(fdf);
+		fdf->offset[0] = fdf->width / 2;
+		fdf->offset[1] = fdf->length / 1.75;
 	}
 	fill_image(fdf);
 }

@@ -46,6 +46,8 @@ void	count_divisor(t_fdf *fdf)
 	int	range;
 
 	range = fdf->z_divisor[0] - fdf->z_divisor[1];
-	if (range)
-		fdf->z_divisor[2] = fdf->length / 4/range;
+	if (range && range < 100)
+		fdf->z_divisor[2] = fdf->length / 4 /range;
+	if (range && range > 100)
+		fdf->z_divisor[2] = fdf->length / 2.75 /range;
 }

@@ -104,7 +104,7 @@ void	create_map(char *str, t_fdf *fdf)
 	count_scale(fdf);
 	count_divisor(fdf);
 	fdf->offset[0] = fdf->width / 2;
-	fdf->offset[1] = fdf->length / 2;
+	fdf->offset[1] = fdf->length / 1.75;
 }
 
 int	parse_map(char *file, t_fdf *fdf)

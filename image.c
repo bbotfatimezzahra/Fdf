@@ -74,7 +74,6 @@ void	draw_map(t_fdf *fdf)
 	int			j;
 	t_bresen	bren;
 
-	draw_background(fdf);
 	i = 0;
 	while (i < fdf->map.rows)
 	{
@@ -90,7 +89,6 @@ void	draw_map(t_fdf *fdf)
 		}
 		i++;
 	}
-	mlx_put_image_to_window(fdf->con, fdf->win, fdf->img, 0, 0);
 }
 
 void	fill_image(t_fdf *fdf)
@@ -104,5 +102,7 @@ void	fill_image(t_fdf *fdf)
 	rotate_z(fdf, fdf->angle[2]);
 	convert_iso(fdf);
 	translate_map(fdf);
+	draw_background(fdf);
 	draw_map(fdf);
+	mlx_put_image_to_window(fdf->con, fdf->win, fdf->img, 0, 0);
 }

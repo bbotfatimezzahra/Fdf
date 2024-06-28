@@ -16,20 +16,6 @@ int	key_hook(int keysym, t_fdf *fdf)
 {
 	if (keysym == XK_Escape)
 		terminate(" ", fdf);
-	if (keysym == XK_plus || keysym == XK_KP_Add
-		|| keysym == XK_minus || keysym == XK_KP_Subtract)
-		zoom(fdf, keysym);
-	if (keysym == XK_Down || keysym == XK_Up
-		|| keysym == XK_Left || keysym == XK_Right)
-		move(fdf, keysym);
-	if (keysym == XK_z || keysym == XK_Z || keysym == XK_a
-		|| keysym == XK_A || keysym == XK_x || keysym == XK_X)
-		rotate(fdf, keysym);
-	if (keysym == XK_s || keysym == XK_S || keysym == XK_y
-		|| keysym == XK_Y || keysym == XK_h || keysym == XK_H)
-		rotate(fdf, keysym);
-	if (keysym == XK_b || keysym == XK_B)
-		reset(fdf, keysym);
 	return (0);
 }
 
