@@ -6,7 +6,7 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 10:31:34 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/26 16:49:26 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/28 19:15:21 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	main(int argc, char **argv)
 	t_fdf	fdf;
 
 	init_fdf(&fdf);
-	if (argc < 2 || parse_map(argv[1], &fdf))
+	if (argc != 2 || parse_map(argv[1], &fdf))
 		terminate(ERR_USAGE, &fdf);
 	start_display(&fdf);
 	return (0);

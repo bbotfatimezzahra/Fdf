@@ -6,7 +6,7 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 14:08:58 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/26 18:59:55 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/28 19:39:07 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,6 @@ void	draw_map(t_fdf *fdf)
 
 void	fill_image(t_fdf *fdf)
 {
-	t_map	map;
-
 	scale_map(fdf);
 	center_map(fdf);
 	rotate_x(fdf, fdf->angle[0]);

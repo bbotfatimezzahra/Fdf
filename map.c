@@ -6,7 +6,7 @@
 /*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:50:44 by fbbot             #+#    #+#             */
-/*   Updated: 2024/06/26 23:50:40 by fbbot            ###   ########.fr       */
+/*   Updated: 2024/06/28 19:26:41 by fbbot            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,9 @@ void	fill_row(char **rows, char **columns, int i, t_fdf *fdf)
 
 void	fill_map(char **rows, char **columns, t_fdf *fdf)
 {
-	int		i;
-	int		tmp;
+	int	i;
+	int	tmp;
 
-	
 	i = 0;
 	while (i < fdf->map.rows)
 	{
@@ -69,7 +68,7 @@ void	fill_map(char **rows, char **columns, t_fdf *fdf)
 		{
 			free_double(rows);
 			free_double(columns);
-			terminate(ERR_MAP,fdf);
+			terminate(ERR_MAP, fdf);
 		}
 	}
 	fdf->map.points[i] = NULL;

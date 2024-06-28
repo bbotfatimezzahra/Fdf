@@ -6,7 +6,7 @@
 #    By: fbbot <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/31 11:40:05 by fbbot             #+#    #+#              #
-#    Updated: 2024/06/26 18:26:04 by fbbot            ###   ########.fr        #
+#    Updated: 2024/06/28 19:38:31 by fbbot            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,19 +28,20 @@ BOBJS	= $(BSRCS:%.c=%.o)
 
 .PHONY : all bonus re clean fclean
 
+.SECONDARY : $(OBJS) $(BOBJS)
+
 all: $(NAME)
 
-#add the cflags
 %.o: %.c
-	$(CC) -I/usr/include -Imlx_linux -O3 -c $< -o $@
+	$(CC) $(CFLAGS) -I/usr/include -Imlx_linux -O3 -c $< -o $@
 
 $(NAME): $(OBJS)
-	$(CC) $(OBJS) -Lmlx_linux -lmlx_Linux $(LFLAGS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) -Lmlx_linux -lmlx_Linux $(LFLAGS) -o $(NAME)
 
 bonus: $(BONUS)
 
 $(BONUS): $(BOBJS)
-	$(CC) $(BOBJS) -Lmlx_linux -lmlx_Linux $(LFLAGS) -o $(BONUS)
+	$(CC) $(CFLAGS) $(BOBJS) -Lmlx_linux -lmlx_Linux $(LFLAGS) -o $(BONUS)
 
 clean:
 	rm -f $(OBJS) $(BOBJS)

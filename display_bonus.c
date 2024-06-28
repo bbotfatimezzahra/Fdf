@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   display_bonus.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fbbot <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/28 19:27:45 by fbbot             #+#    #+#             */
+/*   Updated: 2024/06/28 19:29:11 by fbbot            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fdf.h"
 
 int	key_hook(int keysym, t_fdf *fdf)
@@ -5,7 +17,7 @@ int	key_hook(int keysym, t_fdf *fdf)
 	if (keysym == XK_Escape)
 		terminate(" ", fdf);
 	if (keysym == XK_i || keysym == XK_I
-			|| keysym == XK_o || keysym == XK_O )
+		|| keysym == XK_o || keysym == XK_O)
 		zoom(fdf, keysym);
 	if (keysym == XK_Down || keysym == XK_Up
 		|| keysym == XK_Left || keysym == XK_Right)
